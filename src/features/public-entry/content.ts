@@ -31,17 +31,12 @@ export const fairnessSignals = [
 export const demoFocusShiftId = "tue-late";
 
 export const demoCopy: DemoCopy = {
-  eyebrow: "Instant start",
-  headline: ["Move one shift.", "See the week settle."],
-  description:
-    "Touch the roster before you read about it. One adjustment shows how Equal protects fairness, coverage, and recovery together.",
-  panelEyebrow: "Live demo",
-  panelHeading: "Shift one decision. Watch the week rebalance.",
-  helperLabel: "Try this first",
-  conversionTitle: "Ready to run your own team?",
-  conversionDescription:
-    "Start with your roster, your rules, and your sites once the interaction makes sense.",
-  conversionAction: "Start with your team",
+  eyebrow: "Demo",
+  headline: ["Move one", "shift."],
+  panelEyebrow: "This week",
+  panelHeading: "See the week settle.",
+  conversionTitle: "Use your own team.",
+  conversionAction: "Start",
 };
 
 export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
@@ -50,16 +45,15 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
       label: "Fairness",
       value: "84%",
       qualifier: "Fair",
-      state: "Needs attention",
+      state: "Tight",
     },
-    hint: "Select Tuesday night, then rotate it away from Mia.",
-    signals: ["Fatigue building", "Back-to-back risk", "Coverage held"],
-    insightTitle: "Tuesday night is leaning too hard on Mia.",
+    hint: "Tap Tuesday 19:00.",
+    signals: ["Back-to-back risk", "Coverage held", "Recovery thin"],
+    insightTitle: "Back-to-back risk.",
     insightBody:
-      "Coverage is technically intact, but the same person is carrying another heavy late slot. That squeezes the recovery window and drags the rotation out of balance.",
-    actionLabel: "Rotate Kai into Tuesday night",
-    actionDetail:
-      "One move lifts fairness, keeps coverage intact, and reopens the rest buffer for the rest of the week.",
+      "Rotate Tuesday night to Kai. Mia gets recovery back and coverage stays intact.",
+    actionLabel: "Rotate to Kai",
+    actionDetail: "Fairness rises to 92%.",
     days: [
       {
         day: "Mon",
@@ -70,7 +64,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Lena Park",
             label: "Rest protected",
             tone: "bg-fuchsia-400/18 dark:bg-fuchsia-400/18",
-            note: "Stable opener with healthy recovery behind it.",
+            note: "Recovery is protected.",
           },
           {
             id: "mon-late",
@@ -78,7 +72,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Mia Cruz",
             label: "Night rotation",
             tone: "bg-indigo-500/18 dark:bg-indigo-500/18",
-            note: "Valid on its own, but it raises the cost of another late slot.",
+            note: "This compounds Tuesday night.",
           },
         ],
       },
@@ -91,7 +85,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Owen Diaz",
             label: "Coverage ready",
             tone: "bg-sky-400/18 dark:bg-sky-400/18",
-            note: "Coverage is solid here. The issue is the late rotation below it.",
+            note: "Coverage is stable.",
           },
           {
             id: "tue-late",
@@ -99,7 +93,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Mia Cruz",
             label: "Back-to-back risk",
             tone: "bg-amber-300/24 dark:bg-amber-300/18",
-            note: "This is the pressure point. Move it and the whole week settles down.",
+            note: "This is the pressure point.",
           },
         ],
       },
@@ -112,7 +106,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "June Hall",
             label: "Thin seniority",
             tone: "bg-slate-400/18 dark:bg-slate-300/12",
-            note: "Coverage remains legal, but the mix is less resilient than it should be.",
+            note: "Coverage holds, but the mix is thin.",
           },
           {
             id: "wed-late",
@@ -120,7 +114,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Kai Morgan",
             label: "Recovery gap",
             tone: "bg-cyan-300/20 dark:bg-cyan-300/18",
-            note: "Kai can absorb the Tuesday late slot and reopen a cleaner rotation.",
+            note: "Kai can absorb Tuesday night cleanly.",
           },
         ],
       },
@@ -133,13 +127,12 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
       qualifier: "Fair",
       state: "Balanced",
     },
-    hint: "Tap any shift to inspect it, or reset to replay the change.",
+    hint: "Tap any shift. Reset to replay.",
     signals: fairnessSignals,
-    insightTitle: "The week settles once the late load rotates.",
+    insightTitle: "Week rebalanced.",
     insightBody:
-      "Kai absorbs Tuesday night, Mia gets a healthier recovery window, and the schedule keeps coverage without asking the team to absorb hidden fatigue.",
-    actionDetail:
-      "Equal keeps the explanation visible: fairness rises because the late burden rotates, not because the rules became softer.",
+      "Kai takes Tuesday night. Mia regains recovery and the week stays covered.",
+    actionDetail: "The tradeoff stays visible.",
     days: [
       {
         day: "Mon",
@@ -150,7 +143,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Lena Park",
             label: "Rest protected",
             tone: "bg-fuchsia-400/18 dark:bg-fuchsia-400/18",
-            note: "Stable opener with healthy recovery behind it.",
+            note: "Recovery is protected.",
           },
           {
             id: "mon-late",
@@ -158,7 +151,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Mia Cruz",
             label: "Night rotation",
             tone: "bg-indigo-500/18 dark:bg-indigo-500/18",
-            note: "Still a heavy assignment, but no longer compounded by another late handoff.",
+            note: "Heavy, but no longer compounded.",
           },
         ],
       },
@@ -171,7 +164,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Owen Diaz",
             label: "Coverage ready",
             tone: "bg-sky-400/18 dark:bg-sky-400/18",
-            note: "Coverage remains stable while the late burden rotates fairly.",
+            note: "Coverage remains stable.",
           },
           {
             id: "tue-late",
@@ -179,7 +172,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Kai Morgan",
             label: "Fair rotation",
             tone: "bg-violet-500/18 dark:bg-violet-500/18",
-            note: "The late slot rotates to Kai, lifting fairness without sacrificing coverage.",
+            note: "The late slot rotates cleanly.",
           },
         ],
       },
@@ -192,7 +185,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "June Hall",
             label: "Balanced seniority",
             tone: "bg-blue-400/18 dark:bg-blue-400/18",
-            note: "The experience mix is healthier once the late rotation evens out.",
+            note: "The experience mix is healthier.",
           },
           {
             id: "wed-late",
@@ -200,7 +193,7 @@ export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
             person: "Mia Cruz",
             label: "Recovery protected",
             tone: "bg-cyan-300/20 dark:bg-cyan-300/18",
-            note: "Recovery stays legible because the week is no longer stacking late pressure on one person.",
+            note: "Recovery is visible and protected.",
           },
         ],
       },

@@ -16,8 +16,10 @@ type DemoWorkspaceContextValue = {
   state: DemoScenarioState;
   selectedShiftId: string;
   selectedShift: DemoShift;
+  sheetOpen: boolean;
   canApplySuggestion: boolean;
   selectShift: (shiftId: string) => void;
+  closeSheet: () => void;
   applySuggestion: () => void;
   resetDemo: () => void;
 };
@@ -38,6 +40,7 @@ export function DemoWorkspaceProvider({
 }) {
   const [scenario, setScenario] = useState<DemoScenarioKey>("baseline");
   const [selectedShiftId, setSelectedShiftId] = useState(demoFocusShiftId);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const state = demoScenarios[scenario];
   const selectedShift = findShift(state, selectedShiftId);
   const canApplySuggestion =
@@ -45,6 +48,11 @@ export function DemoWorkspaceProvider({
 
   function selectShift(shiftId: string) {
     setSelectedShiftId(shiftId);
+    setSheetOpen(true);
+  }
+
+  function closeSheet() {
+    setSheetOpen(false);
   }
 
   function applySuggestion() {
@@ -54,6 +62,7 @@ export function DemoWorkspaceProvider({
 
     setScenario("balanced");
     setSelectedShiftId(demoFocusShiftId);
+    setSheetOpen(true);
   }
 
   function resetDemo() {
@@ -68,8 +77,10 @@ export function DemoWorkspaceProvider({
         state,
         selectedShiftId,
         selectedShift,
+        sheetOpen,
         canApplySuggestion,
         selectShift,
+        closeSheet,
         applySuggestion,
         resetDemo,
       }}

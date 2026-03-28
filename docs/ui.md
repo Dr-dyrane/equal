@@ -55,6 +55,7 @@ These route roles should stay explicit.
 - Purpose: minimal product reveal, immediate proof, quiet trust, and CTA
 - This is not a dashboard, settings page, or auth wall
 - This is not a long-form explainer or feature brochure
+- The public reveal should hand off into `/demo` or `/auth`, not trap the user in explanation-first marketing
 
 ### Authentication entry
 
@@ -66,6 +67,13 @@ These route roles should stay explicit.
 
 - `/workspace`
 - Purpose: overview of modules, startup routine, launch progress, and current product surfaces
+
+### Demo entry
+
+- `/demo`
+- Purpose: immediate hands-on understanding before signup friction
+- This should feel like touching the product, not reading about the product
+- Keep it narrow in scope: one interaction, one visible outcome, one conversion path
 
 ### Core product routes
 
@@ -82,9 +90,9 @@ These route roles should stay explicit.
 
 Use the token meanings from `equal.md` and `src/app/globals.css`.
 
-- `primary` `#42a5f5`: trust, guidance, main product action
-- `secondary` `#9c27b0`: premium accent, secondary emphasis
-- `accent` `#ff9800`: energy, attention, secondary alerts
+- `primary` `#2a63ff`: product energy, direct action, active system emphasis
+- `secondary` `#ff4ea6`: brand warmth, vivid highlight, premium bloom
+- `accent` `#8a4dff`: depth, transition, branded emphasis between pink and blue
 - `success` `#81c784`: balance, completion, healthy outcomes
 - `warning` `#ffc107`: risk, imbalance, review required
 
@@ -93,6 +101,8 @@ Rules:
 - Color is semantic, not decorative.
 - Semantic meaning must not change across screens or themes.
 - Avoid random one-off colors outside the token system.
+- Public-route palettes should derive from the splash language: clean white light mode, deep indigo dark mode, magenta-violet-blue glow family.
+- Do not drift back into generic blue/green SaaS gradients when the brand language is already defined.
 
 ### Typography
 
@@ -136,6 +146,12 @@ Preferred hierarchy tools, in order:
 4. Spacing and grouping
 5. Typography contrast
 6. Motion and state change
+
+Product framing rule:
+
+- Center the overall composition when the product reveal needs focus.
+- Do not center the internals of a product surface if that makes it feel like marketing instead of software.
+- The page may be centered while the product surface still behaves like a real interface.
 
 Allowed exceptions:
 
@@ -237,6 +253,7 @@ For Equal specifically:
 
 - `/` must explain what Equal is and why it is different in under five seconds
 - the proof should be visual before it becomes verbal
+- when possible, interaction should arrive before explanation
 
 ### 3. Trust through clarity
 
@@ -319,17 +336,36 @@ Public-entry rule:
 - If proof can be shown visually, remove the text.
 - If a concept needs a full explanation, it belongs deeper in the product, in docs, or in code comments/JSDoc, not on the public entry frame.
 - The user should understand the product in one glance, not by reading down the page.
-- The primary CTA should move the user into the product flow, usually through authentication.
+- The primary CTA should move the user into the product flow, ideally through interaction first and then authentication.
 - Remove preview language when the real product entry path exists.
 - Supporting labels should read like system state, not decorative marketing pills.
+- Keep the words minimal. If a headline can carry the idea, cut the paragraph.
+- Secondary headline lines can support the main one, but they must read quieter through tone, opacity, style, or scale.
+- Avoid authority filler on the first screen if the product proof already carries trust.
+- Header chrome must stay sparse. If utility controls clog the reveal, move them to a footer or quieter surface.
 
 Theme rule for public routes:
 
 - Default public entry to light theme unless there is a deliberate reason not to.
 - Dark theme should feel deep and contained, not like color bleed on a flat black background.
 - Light and dark should both feel designed, not like one is a fallback inversion of the other.
+- Public light mode should feel closer to polished white product photography than blue-tinted SaaS paper.
+- Public dark mode should feel closer to a contained indigo stage than a generic charcoal dashboard.
 
 If this changes later, keep the principle even if the exact composition evolves.
+
+### Landing lessons
+
+These are now explicit rules, not one-off observations from the first landing build.
+
+- Product understanding improved when the page moved from explanation-first to product-first.
+- Hero -> demo -> auth is stronger than hero -> brochure -> auth.
+- Simplicity means fewer decisions on screen, not less design effort.
+- The product should stay the focal object; surrounding chrome should quiet down around it.
+- Mobile must be intentionally recomposed, not treated as scaled desktop.
+- Supporting tags should behave like metadata, not feature bullets.
+- A clean footer can carry secondary controls when the header starts to feel crowded.
+- The splash palette is a source of truth for public-facing color direction.
 
 ## App-shell rules
 
@@ -371,6 +407,8 @@ Rules:
 - hide non-essential labels before horizontal controls start colliding
 - prefer compact 2-column action groupings over long full-width rails when space is tight
 - icon-only controls are acceptable for secondary actions when the accessible label remains intact
+- product preview grids may switch to compact 2-column layouts if that preserves legibility better than single-column sprawl
+- let card internals reflow vertically before truncation destroys meaning
 
 ### Tablet
 
@@ -432,6 +470,8 @@ Rules:
 - semantic color meaning must survive theme changes
 - glass should enhance clarity, not muddy it
 - text should reflow or hide gracefully before it overflows or starts fighting the layout
+- theme tokens should come from one system and eventually cover both public and product routes
+- do not let the landing page and the app shell feel like two different brands
 
 ## Motion rules
 
@@ -538,6 +578,8 @@ Keep the UI guidance grounded in the actual architecture:
 - keep marketing/story surfaces separate from internal product-shell surfaces
 - treat any existing border-heavy utility usage in the current codebase as transitional, not as the target design language
 - when creating or refactoring shared classes, bias toward surface differentiation instead of adding more `border-*` or `ring-*` utilities
+- when a landing or demo pattern proves itself, promote it into doctrine and tokens instead of rebuilding it ad hoc on the next route
+- prefer small feature-scoped components over one large route file for public-entry work
 
 ## No-border review rule
 

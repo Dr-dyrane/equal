@@ -13,6 +13,7 @@ import { SFRectanglePortraitAndArrowRight as DualtoneRectanglePortraitAndArrowRi
 import { SFSparkles as DualtoneSparkles } from "sf-symbols-lib/dualtone/SFSparkles";
 import { SFSquareGrid2x2Fill as DualtoneSquareGrid2x2Fill } from "sf-symbols-lib/dualtone/SFSquareGrid2x2Fill";
 import { SFSunMax as DualtoneSunMax } from "sf-symbols-lib/dualtone/SFSunMax";
+import { SFXmark as DualtoneXmark } from "sf-symbols-lib/dualtone/SFXmark";
 import { SFArrowUpRight as MonochromeArrowUpRight } from "sf-symbols-lib/monochrome/SFArrowUpRight";
 import { SFArrowRight as MonochromeArrowRight } from "sf-symbols-lib/monochrome/SFArrowRight";
 import { SFCalendarCircleFill as MonochromeCalendarCircleFill } from "sf-symbols-lib/monochrome/SFCalendarCircleFill";
@@ -25,6 +26,7 @@ import { SFRectanglePortraitAndArrowRight as MonochromeRectanglePortraitAndArrow
 import { SFSparkles as MonochromeSparkles } from "sf-symbols-lib/monochrome/SFSparkles";
 import { SFSquareGrid2x2Fill as MonochromeSquareGrid2x2Fill } from "sf-symbols-lib/monochrome/SFSquareGrid2x2Fill";
 import { SFSunMax as MonochromeSunMax } from "sf-symbols-lib/monochrome/SFSunMax";
+import { SFXmark as MonochromeXmark } from "sf-symbols-lib/monochrome/SFXmark";
 
 const dualtoneSymbols = {
   "arrow-right": DualtoneArrowRight,
@@ -39,6 +41,7 @@ const dualtoneSymbols = {
   sparkles: DualtoneSparkles,
   "square-grid-2x2-fill": DualtoneSquareGrid2x2Fill,
   "sun-max": DualtoneSunMax,
+  xmark: DualtoneXmark,
 } as const;
 
 const monochromeSymbols = {
@@ -54,6 +57,7 @@ const monochromeSymbols = {
   sparkles: MonochromeSparkles,
   "square-grid-2x2-fill": MonochromeSquareGrid2x2Fill,
   "sun-max": MonochromeSunMax,
+  xmark: MonochromeXmark,
 } as const;
 
 export type SfSymbolName = keyof typeof dualtoneSymbols;

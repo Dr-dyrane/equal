@@ -3,9 +3,9 @@ import {
   landingCopy,
   rosterPreview,
 } from "@/features/public-entry/content";
-import { LandingFooter } from "@/features/public-entry/components/landing-footer";
 import { LandingHero } from "@/features/public-entry/components/landing-hero";
 import { LandingPreviewPanel } from "@/features/public-entry/components/landing-preview-panel";
+import { PublicRouteFooter } from "@/features/public-entry/components/public-route-footer";
 import { PublicRouteFrame } from "@/features/public-entry/components/public-route-frame";
 
 export function LandingPage() {
@@ -26,7 +26,7 @@ export function LandingPage() {
           days={rosterPreview}
           signals={fairnessSignals}
         />
-        <LandingFooter />
+        <PublicRouteFooter />
       </section>
     </PublicRouteFrame>
   );

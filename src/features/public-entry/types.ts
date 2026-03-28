@@ -54,12 +54,10 @@ export type DemoScenarioState = {
 export type DemoCopy = {
   eyebrow: string;
   headline: string[];
-  description: string;
   panelEyebrow: string;
   panelHeading: string;
-  helperLabel: string;
   conversionTitle: string;
-  conversionDescription: string;
+  conversionDescription?: string;
   conversionAction: string;
 };
 

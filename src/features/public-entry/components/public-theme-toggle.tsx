@@ -3,12 +3,16 @@
 import { useTheme } from "next-themes";
 import { SfSymbol } from "@/components/sf-symbol";
 
-export function PublicThemeToggle() {
+export function PublicThemeToggle({ stretch = false }: { stretch?: boolean }) {
   const { resolvedTheme, setTheme } = useTheme();
   const currentTheme = resolvedTheme === "dark" ? "dark" : "light";
 
   return (
-    <div className="story-toggle" aria-label="Theme switcher">
+    <div
+      className="story-toggle"
+      data-stretch={stretch}
+      aria-label="Theme switcher"
+    >
       <button
         type="button"
         aria-pressed={currentTheme === "light"}
