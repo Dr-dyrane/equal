@@ -1,3 +1,4 @@
+import type { AuthMode } from "@/features/public-entry/types";
 import type { AppSession } from "@/providers/auth-provider";
 
 function deriveName(email: string, name: string) {
@@ -10,13 +11,17 @@ function deriveName(email: string, name: string) {
     .join(" ");
 }
 
-export function createPublicSession(email: string, name: string): AppSession {
+export function createPublicSession(
+  email: string,
+  name: string,
+  mode: AuthMode,
+): AppSession {
   return {
     user: {
       id: globalThis.crypto?.randomUUID?.() ?? `equal-${Date.now()}`,
       email,
       name: deriveName(email, name),
-      role: "scheduler",
+      role: mode === "start" ? "owner" : "scheduler",
     },
     issuedAt: new Date().toISOString(),
   };

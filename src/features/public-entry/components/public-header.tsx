@@ -8,6 +8,7 @@ type PublicHeaderProps = {
   actionLabel: string;
   actionIconName: SfSymbolName;
   actionVariant?: "secondary" | "nav";
+  actionCompact?: boolean;
   showThemeToggle?: boolean;
 };
 
@@ -16,6 +17,7 @@ export function PublicHeader({
   actionLabel,
   actionIconName,
   actionVariant = "secondary",
+  actionCompact = false,
   showThemeToggle = true,
 }: PublicHeaderProps) {
   const actionClassName =
@@ -49,10 +51,19 @@ export function PublicHeader({
           href={actionHref}
           aria-label={actionLabel}
           title={actionLabel}
-          className={`${actionClassName} inline-flex h-10 w-10 items-center justify-center sm:h-auto sm:w-auto sm:px-4 sm:py-2 text-sm font-semibold text-[color:var(--story-ink)]`}
+          className={`${actionClassName} inline-flex items-center justify-center text-sm font-semibold text-[color:var(--story-ink)] ${
+            actionCompact
+              ? "h-10 w-10"
+              : "h-10 w-10 sm:h-auto sm:w-auto sm:px-4 sm:py-2"
+          }`}
         >
-          <SfSymbol name={actionIconName} className="h-4 w-4 sm:hidden" />
-          <span className="sr-only sm:not-sr-only">{actionLabel}</span>
+          <SfSymbol
+            name={actionIconName}
+            className={`h-4 w-4 ${actionCompact ? "" : "sm:hidden"}`}
+          />
+          <span className={actionCompact ? "sr-only" : "sr-only sm:not-sr-only"}>
+            {actionLabel}
+          </span>
         </Link>
       </div>
     </header>

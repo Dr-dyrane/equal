@@ -85,11 +85,14 @@ export type DemoScenarioKey = "baseline" | "balanced";
 export type AuthMode = "start" | "signin";
 
 export type AuthContent = {
+  modeLabel: string;
   title: string;
   description: string;
   cta: string;
-  alternateLabel: string;
-  alternateHref: string;
-  alternateAction: string;
+  emailPlaceholder: string;
+  namePlaceholder?: string;
+  showNameField?: boolean;
+  nextTitle: string;
+  nextSteps: readonly string[];
   destination: string;
 };

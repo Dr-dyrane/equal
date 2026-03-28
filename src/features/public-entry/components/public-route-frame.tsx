@@ -12,6 +12,7 @@ type PublicRouteFrameProps = {
     label: string;
     iconName: SfSymbolName;
     variant?: "secondary" | "nav";
+    compact?: boolean;
   };
 };
 
@@ -42,6 +43,7 @@ export function PublicRouteFrame({
           actionLabel={headerAction.label}
           actionIconName={headerAction.iconName}
           actionVariant={headerAction.variant}
+          actionCompact={headerAction.compact}
           showThemeToggle={headerShowThemeToggle}
         />
 
