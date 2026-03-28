@@ -28,6 +28,7 @@ For targeted multi-environment pushes, use `node scripts/vercel-sync-env.mjs --k
 The spec-derived dependency baseline is documented in `docs/dependencies.md`.
 The active provider architecture is documented in `docs/providers.md`.
 The UI implementation guide is documented in `docs/ui.md`.
+The full repo documentation map now starts at `docs/README.md`.
 Self-hosted font assets now live in `public/fonts`, and the official Apple `SF-Symbols-7.dmg` source bundle is staged in `vendor/apple` for macOS-side extraction if needed.
 
 ## Current scope
