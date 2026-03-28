@@ -27,6 +27,7 @@ Create:
 
 ```txt
 drizzle.config.ts
+src/db/connection.ts
 src/db/client.ts
 src/db/index.ts
 src/db/types.ts

@@ -14,6 +14,15 @@ Use a small set of intentional, squashed migrations while the platform is still 
 - schema/migrations: Drizzle
 - validation support: `drizzle-zod`
 - one universal schema declaration exported from TypeScript
+- runtime connection env: `DATABASE_URL` with `DATABASE_URL_UNPOOLED` as fallback
+
+## Commands
+
+Use the repo scripts:
+
+- `npm run db:generate`
+- `npm run db:migrate`
+- `npm run db:studio`
 
 ## Why Drizzle
 
@@ -47,6 +56,7 @@ This means:
 
 ```txt
 src/db/
+  connection.ts
   client.ts
   index.ts
   types.ts
