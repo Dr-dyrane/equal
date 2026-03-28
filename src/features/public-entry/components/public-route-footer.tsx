@@ -27,7 +27,7 @@ export function PublicRouteFooter({
         className={`gap-4 ${
           hasContent
             ? "flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-end"
-            : "flex flex-col items-center text-center"
+            : "flex flex-col items-center"
         }`}
       >
         {hasContent ? (
@@ -46,17 +46,13 @@ export function PublicRouteFooter({
               </p>
             ) : null}
           </div>
-        ) : (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-            {eyebrow}
-          </p>
-        )}
+        ) : null}
 
         <div
           className={`flex w-full gap-3 ${
             hasContent
               ? "flex-col lg:max-w-[24rem] lg:justify-self-end"
-              : "flex-col"
+              : "flex-col items-center"
           }`}
         >
           {actions ? (
@@ -64,7 +60,14 @@ export function PublicRouteFooter({
               {actions}
             </div>
           ) : null}
-          <PublicThemeToggle stretch />
+
+          {hasContent ? (
+            <div className="story-footer-utility self-center lg:self-end">
+              <PublicThemeToggle />
+            </div>
+          ) : (
+            <PublicThemeToggle />
+          )}
         </div>
       </div>
     </footer>

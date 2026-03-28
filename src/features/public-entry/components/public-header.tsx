@@ -26,10 +26,10 @@ export function PublicHeader({
       <Link href="/" className="flex min-w-0 items-center gap-3">
         <div className="story-logo-well flex h-11 w-11 shrink-0 items-center justify-center">
           <Image
-            src="/brand/logo.png"
+            src="/brand/hero.png"
             alt="Equal"
-            width={32}
-            height={32}
+            width={24}
+            height={24}
             priority
           />
         </div>

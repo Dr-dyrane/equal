@@ -61,6 +61,25 @@ export type DemoCopy = {
   conversionAction: string;
 };
 
+export type DemoFeatureExperienceId =
+  | "schedule"
+  | "team"
+  | "swaps"
+  | "analytics"
+  | "setup";
+
+export type DemoFeatureExperience = {
+  id: DemoFeatureExperienceId;
+  label: string;
+  action: string;
+  surfaceLabel: string;
+  surfaceTitle: string;
+  surfaceItems: readonly string[];
+  liveState: string;
+  sheetTitle: string;
+  sheetFields: readonly string[];
+};
+
 export type DemoScenarioKey = "baseline" | "balanced";
 
 export type AuthMode = "start" | "signin";

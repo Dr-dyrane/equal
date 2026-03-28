@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SfSymbol } from "@/components/sf-symbol";
 import { demoCopy } from "@/features/public-entry/content";
 import { DemoIntro } from "@/features/public-entry/components/demo-intro";
+import { DemoPromiseStage } from "@/features/public-entry/components/demo-promise-stage";
 import { DemoWorkspace } from "@/features/public-entry/components/demo-workspace";
 import { PublicRouteFooter } from "@/features/public-entry/components/public-route-footer";
 import { PublicRouteFrame } from "@/features/public-entry/components/public-route-frame";
@@ -29,6 +30,7 @@ export function DemoPage() {
               <DemoWorkspace content={demoCopy} />
             </div>
           </section>
+          <DemoPromiseStage />
           <PublicRouteFooter
             eyebrow="Next"
             title={demoCopy.conversionTitle}

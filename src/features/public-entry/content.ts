@@ -2,6 +2,7 @@ import type {
   AuthContent,
   AuthMode,
   DemoCopy,
+  DemoFeatureExperience,
   DemoScenarioKey,
   DemoScenarioState,
   DayPreview,
@@ -38,6 +39,109 @@ export const demoCopy: DemoCopy = {
   conversionTitle: "Use your own team.",
   conversionAction: "Start",
 };
+
+export const demoFeatureExperiences: DemoFeatureExperience[] = [
+  {
+    id: "schedule",
+    label: "Shifts",
+    action: "Add shift",
+    surfaceLabel: "Week builder",
+    surfaceTitle: "Drop a new shift into the week.",
+    surfaceItems: [
+      "Time block",
+      "Coverage target",
+      "Skill needed",
+      "Fairness impact",
+    ],
+    liveState: "Coverage, fatigue, and fairness respond instantly.",
+    sheetTitle: "Add shift",
+    sheetFields: [
+      "Tue 19:00-07:00",
+      "RN required",
+      "Recovery protected",
+    ],
+  },
+  {
+    id: "team",
+    label: "Team",
+    action: "Add teammate",
+    surfaceLabel: "Team",
+    surfaceTitle: "Bring a new person into the roster.",
+    surfaceItems: [
+      "Availability",
+      "Skills",
+      "Preferences",
+      "Locations",
+    ],
+    liveState: "Coverage options expand as soon as the profile lands.",
+    sheetTitle: "Add teammate",
+    sheetFields: [
+      "Kai Morgan",
+      "Night capable",
+      "Prefers Tue-Thu",
+    ],
+  },
+  {
+    id: "swaps",
+    label: "Swaps",
+    action: "Review swap",
+    surfaceLabel: "Requests",
+    surfaceTitle: "Approve swaps with context, not guesswork.",
+    surfaceItems: [
+      "Request",
+      "Replacement",
+      "Fairness impact",
+      "Coverage held",
+    ],
+    liveState: "Eligible replacements rerank live as the week changes.",
+    sheetTitle: "Swap request",
+    sheetFields: [
+      "Mia -> Kai",
+      "Coverage held",
+      "Fairness improves",
+    ],
+  },
+  {
+    id: "analytics",
+    label: "Fairness",
+    action: "Open insight",
+    surfaceLabel: "Analytics",
+    surfaceTitle: "See the week explain itself.",
+    surfaceItems: [
+      "Fairness trend",
+      "Coverage heatmap",
+      "Overtime watch",
+      "Compliance",
+    ],
+    liveState: "Every shift change stays visible over time.",
+    sheetTitle: "Tuesday nights",
+    sheetFields: [
+      "92% fair",
+      "2 hard shifts",
+      "Balanced seniority",
+    ],
+  },
+  {
+    id: "setup",
+    label: "Rules",
+    action: "Set rules",
+    surfaceLabel: "Setup",
+    surfaceTitle: "Set guardrails without opening the whole system.",
+    surfaceItems: [
+      "Rest window",
+      "Max nights",
+      "Teams",
+      "Sites",
+    ],
+    liveState: "Rules appear only when the workflow needs them.",
+    sheetTitle: "Work rules",
+    sheetFields: [
+      "11h rest",
+      "2 nights max",
+      "West campus",
+    ],
+  },
+];
 
 export const demoScenarios: Record<DemoScenarioKey, DemoScenarioState> = {
   baseline: {
