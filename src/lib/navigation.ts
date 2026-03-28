@@ -19,12 +19,12 @@ export type NavItem = {
 
 export const primaryNavigation: NavItem[] = [
   {
-    href: "/",
-    label: "Dashboard",
-    shortLabel: "Home",
+    href: "/workspace",
+    label: "Overview",
+    shortLabel: "Overview",
     icon: LayoutDashboard,
-    matchPrefix: "/",
-    description: "Cross-module status and launch progress.",
+    matchPrefix: "/workspace",
+    description: "Cross-module status and startup progress.",
   },
   {
     href: "/schedule",
@@ -69,10 +69,6 @@ export const primaryNavigation: NavItem[] = [
 ];
 
 export function isNavActive(pathname: string, item: NavItem) {
-  if (item.href === "/") {
-    return pathname === "/";
-  }
-
   return pathname.startsWith(item.matchPrefix);
 }
 

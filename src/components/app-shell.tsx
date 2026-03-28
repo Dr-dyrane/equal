@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { GlobalActionsDock } from "@/components/global-actions-dock";
+import { SfSymbol } from "@/components/sf-symbol";
+import { useOrg } from "@/providers/org-provider";
+import { useUI } from "@/providers/ui-provider";
 import {
   getCurrentSection,
   isNavActive,
@@ -13,6 +16,16 @@ import {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const currentSection = getCurrentSection(pathname);
+  const { activeSite, activeTeam, organization, role } = useOrg();
+  const { density } = useUI();
+
+  if (
+    pathname === "/" ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/demo")
+  ) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -20,7 +33,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="mx-auto flex min-h-screen w-full max-w-[1600px] gap-6 px-4 pb-24 pt-4 md:px-6 md:pb-6">
         <aside className="glass-panel-strong sticky top-4 hidden h-[calc(100vh-2rem)] w-72 shrink-0 flex-col justify-between p-5 md:flex">
           <div>
-            <Link href="/" className="flex items-center gap-4 rounded-[24px] p-2">
+            <Link
+              href="/workspace"
+              className="flex items-center gap-4 rounded-[24px] p-2"
+            >
               <div className="flex h-14 w-14 items-center justify-center rounded-[22px] bg-white/85 shadow-[0_16px_36px_rgba(15,23,42,0.14)]">
                 <Image
                   src="/brand/logo.png"
@@ -81,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="space-y-4">
             <div className="rounded-[28px] bg-slate-950 px-5 py-5 text-white shadow-glow">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
-                <Sparkles className="h-4 w-4" />
+                <SfSymbol name="sparkles" className="h-4 w-4" size="sm" />
                 Startup ready
               </div>
               <p className="mt-4 text-sm leading-6 text-white/78">
@@ -93,7 +109,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white"
               >
                 Open startup routine
-                <ArrowUpRight className="h-4 w-4" />
+                <SfSymbol name="arrow-up-right" className="h-4 w-4" size="sm" />
               </Link>
             </div>
           </div>
@@ -109,6 +125,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <h1 className="mt-2 font-heading text-3xl text-slate-950">
                   {currentSection}
                 </h1>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="metric-chip">{organization.name}</span>
+                  <span className="metric-chip">{activeSite.name}</span>
+                  <span className="metric-chip">{activeTeam.name}</span>
+                  <span className="metric-chip">{role} / {density}</span>
+                </div>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <span className="inline-flex items-center justify-center gap-2 rounded-full border border-success/30 bg-success/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-emerald-700">
@@ -120,7 +142,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
                 >
                   Start setup
-                  <ArrowUpRight className="h-4 w-4" />
+                  <SfSymbol name="arrow-up-right" className="h-4 w-4" size="sm" />
                 </Link>
               </div>
             </div>
@@ -129,6 +151,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <main className="flex-1 pb-6">{children}</main>
         </div>
       </div>
+
+      <GlobalActionsDock />
 
       <nav className="fixed inset-x-3 bottom-3 z-30 rounded-[28px] border border-white/50 bg-white/78 px-3 py-3 shadow-soft backdrop-blur-2xl md:hidden">
         <div className="grid grid-cols-6 gap-2">

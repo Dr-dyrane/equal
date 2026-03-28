@@ -1,11 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import localFont from "next/font/local";
+import { Geist_Mono, Space_Grotesk } from "next/font/google";
 import { AppShell } from "@/components/app-shell";
+import { AppProviders } from "@/providers/app-providers";
 import "./globals.css";
 
-const bodyFont = Geist({
+const bodyFont = localFont({
+  src: [
+    {
+      path: "../../public/fonts/SF-Pro-Display-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/SF-Pro-Display-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/SF-Pro-Display-Semibold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/SF-Pro-Display-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-body",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 const headingFont = Space_Grotesk({
@@ -31,10 +56,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <AppShell>{children}</AppShell>
+        <AppProviders>
+          <AppShell>{children}</AppShell>
+          <Analytics />
+        </AppProviders>
       </body>
     </html>
   );

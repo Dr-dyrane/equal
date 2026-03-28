@@ -54,9 +54,9 @@ Purpose: spacing, radius, blur, elevation, translucency, and consistency enforce
 
 Purpose: Apple-style visual language with glass, blur, depth, specular highlights, and motion. Use it for surface physics, not as decoration.
 
-4. `react-sf-symbols` with SF Symbols and SF Pro
+4. `sf-symbols-lib` with SF Symbols and SF Pro
 
-Purpose: primary Apple iconography for Next.js and TypeScript. It supports local SF Symbols fonts, variable weights, multicolor rendering, filled and outline pairs, and server-safe rendering.
+Purpose: primary Apple iconography for Next.js and TypeScript. It provides tree-shakeable SF Symbols React components with server-safe rendering, while local Apple font assets remain available for typography and icon-font fallback work.
 
 5. Lucide
 
@@ -81,7 +81,7 @@ Purpose: expressive multi-weight fallback icons when SF Symbols does not cover a
 
 #### Iconography
 
-- Primary: `react-sf-symbols` using local SF Symbols fonts
+- Primary: `sf-symbols-lib` for SF Symbols React components
 - Secondary: Lucide
 - Optional: Phosphor Icons
 
@@ -612,7 +612,7 @@ fairness_ledger
 
 ### SERVER AUTH RULES
 
-- JWT tokens identify user_id and organisation_id, plus an array of roles. A Supabase edge function attaches these claims. The Next.js client uses these claims to call serverless functions.
+- JWT tokens identify user_id and organisation_id, plus an array of roles. The app's auth layer attaches these claims. The Next.js client uses these claims to call serverless functions.
 
 ## 12. ⚙️ BACKEND CONTRACT (SERVERLESS FUNCTIONS)
 
@@ -704,9 +704,9 @@ Staff Profile
 
 ### DATA STRATEGY
 
-- Useserver componentsin Next.js 14 to fetch schedules and assignments from Supabase on the server for initial rendering.
+- Useserver componentsin Next.js 14 to fetch schedules and assignments from Neon-backed Postgres on the server for initial rendering.
 - Hydrate client-side components to handle drag-and-drop and inline editing.
-- Real-time updates via Supabase Realtime (Postgres listen/notify) for new assignments, swap requests and approvals.
+- Real-time updates via Postgres listen/notify or a websocket transport for new assignments, swap requests and approvals.
 - Cache schedules in IndexedDB for offline access and prefetch future periods.
 
 ## 14. 🎨 DESIGN SYSTEM (YOUR RULES LOCKED IN)
@@ -808,7 +808,7 @@ Ensure that all components adapt gracefully but maintain hierarchy and gestures 
 
 ### SCALING ASSUMPTIONS
 
-- Built on serverless infrastructure (Supabase/Postgres + Vercel) to scale up automatically.
+- Built on serverless infrastructure (Neon/Postgres + Vercel) to scale up automatically.
 - Expect to support 10-10, 000 employees per organisation; design query plans accordingly.
 
 ## 17. 🏗️ BUILD SEQUENCE
@@ -816,13 +816,13 @@ Ensure that all components adapt gracefully but maintain hierarchy and gestures 
 ### ORDER
 
 - Database schema - create tables, indexes and RLS policies.
-- Auth - set up Supabase auth with custom claims (user_id, organisation_id, roles).
+- Auth - set up JWT/OIDC auth with custom claims (user_id, organisation_id, roles).
 - Core entities - implement API routes/functions for users, skills, shift templates and schedules.
 - Constraint engine - build rule interpreter and optimiser (use OR-Tools or a custom solver in a serverless function).
 - Functions - implement API endpoints (`createSchedule`, `generateAssignments`, etc.).
 - UI skeleton - scaffold the Next.js app with navigation and placeholder screens.
 - Features - integrate the schedule board, preferences, fairness ledger, and swap flow.
-- Realtime - add Supabase Realtime for live updates.
+- Realtime - add Postgres listen/notify-backed live updates.
 - Admin - build role management and the rule editor.
 - Polish - implement analytics dashboards, refine motion and accessibility, and finalise the design system.
 

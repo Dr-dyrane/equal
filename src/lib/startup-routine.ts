@@ -116,7 +116,7 @@ export const buildSequence: BuildPhase[] = [
   {
     title: "Auth and organization claims",
     description:
-      "Set up Supabase auth and attach user, organization, and role claims for server-side access control.",
+      "Set up JWT/OIDC auth, attach user, organization, and role claims, and use them for Neon-backed server-side access control.",
   },
   {
     title: "Core entities and APIs",
@@ -144,7 +144,7 @@ export const startupChecklist = [
   "Bootstrap residue, build output, and old backup folders were removed from the workspace.",
   "The documented first-run flow is now centralized in code instead of duplicated in pages.",
   "Clean and startup verification scripts are available for repeatable local launches.",
-  "Dashboard and onboarding surfaces now point to the same documented startup path.",
+  "Workspace overview and onboarding surfaces now point to the same documented startup path.",
 ];
 
 export const startupSuccessCriteria = [
