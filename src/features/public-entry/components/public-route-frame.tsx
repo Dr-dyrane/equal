@@ -35,7 +35,7 @@ export function PublicRouteFrame({
       <div className="story-glow-right absolute right-[6%] top-20 h-64 w-64 rounded-full blur-[140px]" />
 
       <div
-        className={`relative mx-auto flex min-h-screen w-full ${widthClasses[width]} flex-col px-4 pb-6 pt-5 md:px-6 lg:px-8`}
+        className={`relative mx-auto flex min-h-screen w-full ${widthClasses[width]} flex-col px-2 sm:px-4 pb-6 pt-5 md:px-6 lg:px-8`}
       >
         <PublicHeader
           actionHref={headerAction.href}
