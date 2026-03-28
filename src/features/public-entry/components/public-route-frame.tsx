@@ -6,6 +6,7 @@ type PublicRouteFrameProps = {
   children: ReactNode;
   width?: "wide" | "narrow";
   centerMain?: boolean;
+  headerShowThemeToggle?: boolean;
   headerAction: {
     href: string;
     label: string;
@@ -23,6 +24,7 @@ export function PublicRouteFrame({
   children,
   width = "wide",
   centerMain = false,
+  headerShowThemeToggle = true,
   headerAction,
 }: PublicRouteFrameProps) {
   return (
@@ -40,6 +42,7 @@ export function PublicRouteFrame({
           actionLabel={headerAction.label}
           actionIconName={headerAction.iconName}
           actionVariant={headerAction.variant}
+          showThemeToggle={headerShowThemeToggle}
         />
 
         <main

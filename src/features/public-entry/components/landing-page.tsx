@@ -3,6 +3,7 @@ import {
   landingCopy,
   rosterPreview,
 } from "@/features/public-entry/content";
+import { LandingFooter } from "@/features/public-entry/components/landing-footer";
 import { LandingHero } from "@/features/public-entry/components/landing-hero";
 import { LandingPreviewPanel } from "@/features/public-entry/components/landing-preview-panel";
 import { PublicRouteFrame } from "@/features/public-entry/components/public-route-frame";
@@ -11,6 +12,7 @@ export function LandingPage() {
   return (
     <PublicRouteFrame
       width="wide"
+      headerShowThemeToggle={false}
       headerAction={{
         href: "/auth?mode=signin",
         label: "Sign in",
@@ -24,6 +26,7 @@ export function LandingPage() {
           days={rosterPreview}
           signals={fairnessSignals}
         />
+        <LandingFooter />
       </section>
     </PublicRouteFrame>
   );

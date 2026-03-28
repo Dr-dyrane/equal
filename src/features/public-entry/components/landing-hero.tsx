@@ -24,7 +24,7 @@ export function LandingHero({ content, signals }: LandingHeroProps) {
             </span>
           ))}
         </h1>
-        <p className="text-balance font-heading text-[3.4rem] leading-[0.9] text-[color:var(--story-subtle)] italic sm:text-[5rem] lg:text-[6.5rem] xl:text-[7.1rem]">
+        <p className="text-balance font-heading text-[3.05rem] leading-[0.9] text-[color:var(--story-subtle)] italic opacity-90 sm:text-[4.55rem] lg:text-[5.95rem] xl:text-[6.45rem]">
           {content.secondaryHeadline}
         </p>
       </div>

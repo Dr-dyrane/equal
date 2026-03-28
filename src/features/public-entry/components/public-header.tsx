@@ -8,6 +8,7 @@ type PublicHeaderProps = {
   actionLabel: string;
   actionIconName: SfSymbolName;
   actionVariant?: "secondary" | "nav";
+  showThemeToggle?: boolean;
 };
 
 export function PublicHeader({
@@ -15,6 +16,7 @@ export function PublicHeader({
   actionLabel,
   actionIconName,
   actionVariant = "secondary",
+  showThemeToggle = true,
 }: PublicHeaderProps) {
   const actionClassName =
     actionVariant === "nav" ? "story-nav-secondary" : "story-cta-secondary";
@@ -42,7 +44,7 @@ export function PublicHeader({
       </Link>
 
       <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-        <PublicThemeToggle />
+        {showThemeToggle ? <PublicThemeToggle /> : null}
         <Link
           href={actionHref}
           aria-label={actionLabel}
