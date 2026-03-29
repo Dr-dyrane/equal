@@ -29,9 +29,8 @@ export type RoleCard = {
 export const startupRoutine: StartupStep[] = [
   {
     id: "organization",
-    title: "Create the organization",
-    description:
-      "Capture the organization name, timezone, and the initial owner account. This becomes the boundary for schedules, users, rules, and analytics.",
+    title: "Set the organization",
+    description: "Name it. Set the timezone.",
     owner: "Owner",
     href: "/settings",
     tone: "primary",
@@ -42,9 +41,8 @@ export const startupRoutine: StartupStep[] = [
   },
   {
     id: "team",
-    title: "Invite the core team",
-    description:
-      "Bring in admins and schedulers first so role management, rule configuration, and approval workflows have clear accountability.",
+    title: "Add the core team",
+    description: "Start with the people who run the week.",
     owner: "Owner + Admin",
     href: "/team",
     tone: "secondary",
@@ -55,9 +53,8 @@ export const startupRoutine: StartupStep[] = [
   },
   {
     id: "rules",
-    title: "Define templates and rules",
-    description:
-      "Set up shift templates, required skills, and the first set of hard and soft constraints before any schedule is generated.",
+    title: "Set shifts and rules",
+    description: "Lock the basics before the first run.",
     owner: "Admin + Scheduler",
     href: "/shifts",
     tone: "accent",
@@ -68,9 +65,8 @@ export const startupRoutine: StartupStep[] = [
   },
   {
     id: "preferences",
-    title: "Collect staff preferences",
-    description:
-      "Availability, preferred shift types, leave windows, and notes turn a valid roster into a fair one.",
+    title: "Collect preferences",
+    description: "Availability first.",
     owner: "Staff + Scheduler",
     href: "/team",
     tone: "success",
@@ -81,9 +77,8 @@ export const startupRoutine: StartupStep[] = [
   },
   {
     id: "generate",
-    title: "Generate the first roster",
-    description:
-      "Run the optimizer, inspect conflicts and fairness impact, and prepare the first publishable schedule.",
+    title: "Generate the first week",
+    description: "Run it. Check the calls.",
     owner: "Scheduler",
     href: "/schedule",
     tone: "warning",
@@ -94,9 +89,8 @@ export const startupRoutine: StartupStep[] = [
   },
   {
     id: "publish",
-    title: "Review and publish",
-    description:
-      "Adjust assignments if needed, publish the roster, and notify staff so swaps and follow-up actions can begin.",
+    title: "Publish",
+    description: "Send the week.",
     owner: "Scheduler",
     href: "/schedule",
     tone: "primary",
@@ -148,41 +142,41 @@ export const startupChecklist = [
 ];
 
 export const startupSuccessCriteria = [
-  "Roles and permissions are clear from day one.",
-  "Templates and rules match the real operating environment.",
-  "Staff preferences are captured before publishing the first roster.",
+  "Roles are clear.",
+  "Rules match the floor.",
+  "Preferences are in before publish.",
 ];
 
 export const startupGuardrails = [
-  "Legal maximums and rest requirements stay hard constraints.",
-  "Approved leave always overrides schedule proposals.",
-  "Emergency overrides require audit logging and explicit authority.",
+  "Legal limits stay hard.",
+  "Approved leave wins.",
+  "Overrides stay logged.",
 ];
 
 export const roleCards: RoleCard[] = [
   {
     title: "Owner",
-    note: "Full control, billing, organization-level permissions, and escalation authority.",
+    note: "Owns the workspace.",
     tone: "bg-primary/12 text-sky-700",
   },
   {
     title: "Admin",
-    note: "User, rule, and settings management without organization deletion.",
+    note: "Runs people, rules, and settings.",
     tone: "bg-secondary/14 text-fuchsia-700",
   },
   {
     title: "Scheduler",
-    note: "Shift, assignment, swap, and roster generation authority.",
+    note: "Builds and publishes the week.",
     tone: "bg-success/16 text-emerald-700",
   },
   {
     title: "Staff",
-    note: "Own schedule visibility, preferences, and swap requests only.",
+    note: "Sees own week and preferences.",
     tone: "bg-warning/20 text-amber-700",
   },
   {
     title: "Observer",
-    note: "Read-only access for payroll, auditors, and operational visibility.",
+    note: "Read-only.",
     tone: "bg-slate-100 text-slate-700",
   },
 ];

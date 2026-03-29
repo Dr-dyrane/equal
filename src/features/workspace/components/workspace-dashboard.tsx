@@ -36,11 +36,10 @@ export function WorkspaceDashboard() {
             Today
           </p>
           <h2 className="mt-3 text-balance font-heading text-[2.55rem] leading-[0.94] text-[color:var(--story-ink)] sm:text-[3.25rem]">
-            {getFirstName(user?.name)}, keep the week balanced.
+            {getFirstName(user?.name)}, keep it balanced.
           </h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-[color:var(--story-muted)]">
-            {activeTeam.name} at {activeSite.name} is ready for review. One fairness
-            risk and one swap need attention.
+          <p className="mt-3 max-w-xl text-sm leading-6 text-[color:var(--story-muted)]">
+            {activeTeam.name} / {activeSite.name}
           </p>
 
           <div className="mt-5">
@@ -48,7 +47,7 @@ export function WorkspaceDashboard() {
               href="/schedule"
               className="story-primary-cta inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-primary-text)]"
             >
-              Open schedule
+              Open week
               <SfSymbol name="arrow-right" className="h-[0.95rem] w-[0.95rem]" />
             </Link>
           </div>

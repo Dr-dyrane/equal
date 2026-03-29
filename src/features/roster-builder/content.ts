@@ -48,18 +48,18 @@ export type ScheduleNote = {
 export const scheduleActions = [
   {
     id: "review",
-    label: "Review conflicts",
-    detail: "Move straight to the shifts that still need judgment.",
+    label: "Review",
+    detail: "Open the calls that still need judgment.",
   },
   {
     id: "generate",
-    label: "Refresh draft",
-    detail: "Re-run the week after changes to people, rules, or demand.",
+    label: "Refresh",
+    detail: "Run the week again.",
   },
   {
     id: "publish",
-    label: "Publish week",
-    detail: "Send the roster once the remaining risk is resolved.",
+    label: "Publish",
+    detail: "Send the roster.",
   },
 ] as const;
 
@@ -423,19 +423,19 @@ export function getScheduleMetrics(stage: RosterStage): ScheduleMetric[] {
     {
       label: "Hard rules",
       value: "100%",
-      detail: "Legal rest, skill coverage, and no-overlap checks still hold.",
+      detail: "Still locked.",
       tone: "success",
     },
     {
       label: "Fairness",
       value: stage === "draft" ? "90.4" : stage === "reviewing" ? "93.8" : "95.1",
-      detail: "The week is balanced, but Tuesday night still needs judgment.",
+      detail: "Tuesday night still leans hard.",
       tone: "primary",
     },
     {
       label: "Readiness",
       value: publishValue,
-      detail: "One decision still blocks the roster from going out cleanly.",
+      detail: "One call left.",
       tone: "warning",
     },
   ];
@@ -455,31 +455,31 @@ export function getScheduleSummary(stage: RosterStage) {
   if (stage === "published") {
     return {
       badge: "Published",
-      title: "The week is out.",
-      detail: "Coverage, fairness, and notifications are already aligned.",
+      title: "Week is out.",
+      detail: "Done.",
     };
   }
 
   if (stage === "ready") {
     return {
       badge: "Ready",
-      title: "One last review before publish.",
-      detail: "Coverage is stable. The only remaining question is fairness on Tuesday night.",
+      title: "Ready to send.",
+      detail: "Check Tuesday night.",
     };
   }
 
   if (stage === "draft") {
     return {
       badge: "Draft",
-      title: "A fresh week is ready for review.",
-      detail: "The system handled the heavy lifting. You only need to judge the edge cases.",
+      title: "Week is ready.",
+      detail: "Start with Tuesday night.",
     };
   }
 
   return {
     badge: "Reviewing",
-    title: "One move changes the week.",
-    detail: "Tuesday night still leans too hard on Mia. Review that assignment before publish.",
+    title: "Tuesday needs a call.",
+    detail: "Check Mia before publish.",
   };
 }
 
@@ -491,11 +491,11 @@ export function getScheduleFocus(
 ) {
   return [
     {
-      label: "Focus day",
+      label: "Day",
       value: selectedDay,
     },
     {
-      label: "Fairness lens",
+      label: "View",
       value: comparisonMode === "team" ? "Team view" : comparisonMode === "role" ? "Role view" : "Self view",
     },
     {
@@ -503,7 +503,7 @@ export function getScheduleFocus(
       value: window === "6-weeks" ? "6 weeks" : window === "quarter" ? "Quarter" : "Year",
     },
     {
-      label: "Conflicts",
+      label: "Left",
       value: `${unresolvedConflictCount} left`,
     },
   ] as const;
@@ -513,17 +513,17 @@ export function getScheduleNotes(explanationPanelOpen: boolean): ScheduleNote[] 
   const notes: ScheduleNote[] = [
     {
       name: "Mia Cruz",
-      note: "Tuesday night currently creates the only fairness drift still worth reviewing.",
+      note: "Tuesday night still leans hard.",
       tone: "secondary",
     },
     {
       name: "Kai Morgan",
-      note: "Weekend balance stays on target if the Tuesday reassignment holds.",
+      note: "Weekend load stays even.",
       tone: "primary",
     },
     {
       name: "Lena Park",
-      note: "Rest windows are already protected across the full week.",
+      note: "Rest stays protected.",
       tone: "success",
     },
   ];
@@ -532,7 +532,7 @@ export function getScheduleNotes(explanationPanelOpen: boolean): ScheduleNote[] 
 }
 
 export const scheduleGuardrails = [
-  "Rest periods lock before soft scoring changes anything.",
-  "Required skills stay covered for every publishable shift.",
-  "Fairness is judged across the cycle, not shift by shift in isolation.",
+  "Rest locks first.",
+  "Skills stay covered.",
+  "Fairness is cycle-wide.",
 ] as const;

@@ -51,17 +51,17 @@ export function getDashboardMetrics(): DashboardMetric[] {
     {
       label: "Fairness",
       value: "92%",
-      detail: "Balanced enough to publish after one review pass.",
+      detail: "One review left.",
     },
     {
       label: "Coverage",
       value: "99.4%",
-      detail: "Critical roles are covered across the active week.",
+      detail: "Critical roles covered.",
     },
     {
       label: "Swaps",
       value: "04",
-      detail: "Only one request needs manager review today.",
+      detail: "One needs review.",
     },
   ];
 }
@@ -206,20 +206,20 @@ export function getDashboardDays(): DashboardDay[] {
 export function getAttentionItems(role: AppRole): AttentionItem[] {
   const base: AttentionItem[] = [
     {
-      title: "One fairness drift",
-      detail: "Tuesday night still leans too hard on Mia. Review the week before publish.",
+      title: "Fairness drift",
+      detail: "Tuesday night leans hard on Mia.",
       href: "/schedule",
       tone: "warning",
     },
     {
-      title: "Two preference gaps",
-      detail: "Field Coverage still needs updated availability for next week.",
+      title: "Preference gaps",
+      detail: "Availability still needs updates.",
       href: "/team",
       tone: "secondary",
     },
     {
-      title: "Rules want review",
-      detail: "Weekend weighting is set, but recovery windows still need a final pass.",
+      title: "Rules review",
+      detail: "Recovery windows need a pass.",
       href: "/settings",
       tone: "primary",
     },
@@ -228,14 +228,14 @@ export function getAttentionItems(role: AppRole): AttentionItem[] {
   if (role === "staff" || role === "observer") {
     return [
       {
-        title: "Your week is ready",
-        detail: "Review your upcoming shifts and any open swaps.",
+        title: "Week is ready",
+        detail: "Check your shifts and swaps.",
         href: "/schedule",
         tone: "primary",
       },
       {
-        title: "Fairness stays visible",
-        detail: "You can see how nights and weekends are trending for your team.",
+        title: "Fairness view",
+        detail: "See how nights and weekends are trending.",
         href: "/analytics",
         tone: "secondary",
       },
@@ -249,17 +249,17 @@ export function getFairnessLines(): FairnessLine[] {
   return [
     {
       name: "Mia Cruz",
-      detail: "One extra night this cycle. Review before publish.",
+      detail: "One extra night.",
       tone: "text-[color:var(--story-brand-pink)]",
     },
     {
       name: "Kai Morgan",
-      detail: "Weekend load is on target.",
+      detail: "Weekend load is even.",
       tone: "text-[color:var(--story-brand-blue)]",
     },
     {
       name: "Lena Park",
-      detail: "Rest windows are fully protected this week.",
+      detail: "Rest stays protected.",
       tone: "text-emerald-500",
     },
   ];

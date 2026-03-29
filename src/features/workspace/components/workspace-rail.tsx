@@ -34,9 +34,6 @@ export function WorkspaceRail({
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
               Today
             </p>
-            <h3 className="mt-2 font-heading text-[1.85rem] leading-none text-[color:var(--story-ink)]">
-              What needs you.
-            </h3>
           </div>
           <div className="story-fairness-indicator">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--story-subtle)]">
@@ -53,32 +50,32 @@ export function WorkspaceRail({
         </div>
 
         <div className="mt-5 space-y-3">
-          {attention.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="story-soft-card block px-4 py-4 transition hover:-translate-y-[1px]"
-            >
-              <div className="flex items-start gap-3">
-                <span className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${toneDot(item.tone)}`} />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-[color:var(--story-ink)]">
-                    {item.title}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                    {item.detail}
-                  </p>
+            {attention.map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="story-soft-card block px-4 py-4 transition hover:-translate-y-[1px]"
+              >
+                <div className="flex items-start gap-3">
+                  <span className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${toneDot(item.tone)}`} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-[color:var(--story-ink)]">
+                      {item.title}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
+                      {item.detail}
+                    </p>
+                  </div>
+                  <SfSymbol name="arrow-right" className="mt-1 h-[0.95rem] w-[0.95rem] text-[color:var(--story-subtle)]" />
                 </div>
-                <SfSymbol name="arrow-right" className="mt-1 h-[0.95rem] w-[0.95rem] text-[color:var(--story-subtle)]" />
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
         </div>
 
         {primaryStep ? (
           <div className="mt-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Next step
+              Next
             </p>
             <Link
               href={primaryStep.href}
@@ -93,9 +90,6 @@ export function WorkspaceRail({
               </div>
               <p className="mt-3 text-sm font-semibold text-[color:var(--story-ink)]">
                 {primaryStep.title}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                {primaryStep.description}
               </p>
             </Link>
           </div>
@@ -112,7 +106,7 @@ export function WorkspaceRail({
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-[color:var(--story-ink)]">{line.name}</p>
                 <span className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${line.tone}`}>
-                  live
+                  now
                 </span>
               </div>
               <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">

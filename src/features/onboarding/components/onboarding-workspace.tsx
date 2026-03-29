@@ -17,11 +17,10 @@ export function OnboardingWorkspace() {
               Setup
             </span>
             <h1 className="mt-4 text-balance font-heading text-[2.55rem] leading-[0.94] text-[color:var(--story-ink)] sm:text-[3.25rem]">
-              Set up the first fair week.
+              Start the first week.
             </h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-[color:var(--story-muted)]">
-              Keep setup calm: define the organization, bring in the core team, set
-              the rules, then open the first publishable schedule.
+            <p className="mt-3 max-w-xl text-sm leading-6 text-[color:var(--story-muted)]">
+              Name it. Add people. Set rules.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -50,7 +49,7 @@ export function OnboardingWorkspace() {
                 {String(startupRoutine.length).padStart(2, "0")}
               </p>
               <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                A short sequence is easier to finish than a sprawling admin setup.
+                Keep it short.
               </p>
             </article>
             <article className="story-soft-card px-4 py-4">
@@ -61,7 +60,7 @@ export function OnboardingWorkspace() {
                 {String(roleCards.length).padStart(2, "0")}
               </p>
               <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                Ownership is clear before more teammates and rules enter the system.
+                Keep ownership clear.
               </p>
             </article>
             <article className="story-soft-card px-4 py-4">
@@ -72,7 +71,7 @@ export function OnboardingWorkspace() {
                 {String(startupGuardrails.length).padStart(2, "0")}
               </p>
               <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                The week starts with a few non-negotiables instead of dozens of knobs.
+                Keep the rules hard.
               </p>
             </article>
           </section>
@@ -81,7 +80,7 @@ export function OnboardingWorkspace() {
         <div className="grid gap-4">
           <section className="story-panel px-5 py-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Success looks like
+              Done when
             </p>
             <div className="mt-4 space-y-3">
               {startupSuccessCriteria.map((item) => (
@@ -94,7 +93,7 @@ export function OnboardingWorkspace() {
 
           <section className="story-panel px-5 py-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Role shape
+              Roles
             </p>
             <div className="mt-4 space-y-3">
               {roleCards.slice(0, 3).map((role) => (
@@ -122,7 +121,7 @@ export function OnboardingWorkspace() {
               Sequence
             </p>
             <h2 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
-              Move through setup once.
+              Go once.
             </h2>
           </div>
           <span className="story-system-label">6 steps</span>
@@ -146,9 +145,6 @@ export function OnboardingWorkspace() {
                 </div>
                 <SfSymbol name="arrow-right" className="h-[0.95rem] w-[0.95rem] text-[color:var(--story-subtle)]" />
               </div>
-              <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                {step.description}
-              </p>
             </Link>
           ))}
         </div>

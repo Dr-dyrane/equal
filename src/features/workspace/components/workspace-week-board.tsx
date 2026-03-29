@@ -21,11 +21,8 @@ export function WorkspaceWeekBoard({ days }: { days: DashboardDay[] }) {
         This week
       </p>
       <h3 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
-        Calm on the surface.
+        Week at a glance.
       </h3>
-      <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-        One fairness risk remains.
-      </p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {days.map((day, index) => (

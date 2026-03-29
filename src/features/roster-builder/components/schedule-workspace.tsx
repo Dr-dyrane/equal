@@ -89,7 +89,7 @@ export function ScheduleWorkspace() {
           <h2 className="mt-4 text-balance font-heading text-[2.55rem] leading-[0.94] text-[color:var(--story-ink)] sm:text-[3.25rem]">
             {summary.title}
           </h2>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-[color:var(--story-muted)]">
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--story-muted)]">
             {summary.detail}
           </p>
 
@@ -107,7 +107,7 @@ export function ScheduleWorkspace() {
               onClick={reviewConflicts}
               className="story-primary-cta inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-primary-text)]"
             >
-              Review conflicts
+              Review
               <SfSymbol name="arrow-right" className="h-[0.95rem] w-[0.95rem]" />
             </button>
             <button
@@ -115,14 +115,14 @@ export function ScheduleWorkspace() {
               onClick={generateDraft}
               className="story-nav-secondary inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-ink)]"
             >
-              Refresh draft
+              Refresh
             </button>
             <button
               type="button"
               onClick={publishRoster}
               className="story-nav-secondary inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-ink)]"
             >
-              Publish week
+              Publish
             </button>
           </div>
         </section>
@@ -150,11 +150,8 @@ export function ScheduleWorkspace() {
                 Week of March 31
               </p>
               <h3 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
-                Keep the board legible.
+                {activeDay.day}
               </h3>
-              <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                Select the day that needs judgment, then choose the shift you want to adjust.
-              </p>
             </div>
             <span className="story-system-label">{selectedDay}</span>
           </div>
@@ -186,10 +183,7 @@ export function ScheduleWorkspace() {
           <article className="schedule-day-card mt-4 p-4 sm:p-5" data-active="true">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="font-heading text-[2rem] leading-none text-[color:var(--story-ink)] sm:text-[2.35rem]">
-                  {activeDay.day}
-                </p>
-                <p className="mt-2 text-sm text-[color:var(--story-muted)]">{activeDay.date}</p>
+                <p className="text-sm text-[color:var(--story-muted)]">{activeDay.date}</p>
               </div>
               <span className="story-system-label">{activeDay.summary}</span>
             </div>
@@ -229,11 +223,8 @@ export function ScheduleWorkspace() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-                What changes
+                Now
               </p>
-              <h3 className="mt-2 font-heading text-[1.85rem] leading-none text-[color:var(--story-ink)]">
-                Why this week still needs you.
-              </h3>
             </div>
             <button
               type="button"
@@ -267,7 +258,7 @@ export function ScheduleWorkspace() {
 
         <section className="story-panel px-5 py-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-            Guardrails
+            Rules
           </p>
           <div className="mt-4 space-y-3">
             {scheduleGuardrails.map((item) => (
