@@ -16,47 +16,32 @@ export function LandingHero({ content, signals }: LandingHeroProps) {
         {content.eyebrow}
       </span>
 
-      <div className="space-y-1.5">
+      <Image
+  src="/brand/hero.png"
+  alt="Equal brand mark"
+  width={140}
+  height={140}
+  priority
+  sizes="(max-width: 640px) 80px, (max-width: 1024px) 96px, (max-width: 1280px) 112px, 120px"
+  className="h-auto w-[80px] sm:w-[96px] lg:w-[112px] xl:w-[120px]"
+/>
+
+      <div className="flex flex-col gap-2 space-y-2 mb-20">
         <h1 className="text-balance font-black text-[3.4rem] leading-[0.9] text-[color:var(--story-ink)] sm:text-[5rem] lg:text-[6.5rem] xl:text-[7.1rem]">
-          {content.headline.map((line) => (
-            <span key={line}>
-              {line}
-              <br />
-            </span>
-          ))}
+          {content.headline}
         </h1>
-        <p className="text-balance font-heading text-[3.05rem] leading-[0.9] text-[color:var(--story-subtle)] italic opacity-90 sm:text-[4.55rem] lg:text-[5.95rem] xl:text-[6.45rem]">
+        <p className="text-balance font-heading text-[1rem] leading-[0.9] text-[color:var(--story-subtle)] opacity-90 sm:text-[2rem] lg:text-[3rem] xl:text-[4rem]">
           {content.secondaryHeadline}
         </p>
       </div>
 
-      <Image
-        src="/brand/logo.png"
-        alt="Equal brand mark"
-        width={393}
-        height={393}
-        priority
-        sizes="(max-width: 640px) 12rem, (max-width: 1024px) 15rem, 18rem"
-        className="story-logo-well h-auto w-[11.5rem] sm:w-[13.5rem] lg:w-[16rem] xl:w-[18rem] rotate-275 hover:rotate-360 transition-transform ease-in-out duration-300 my-20"
-      />
-
-      <div className="grid w-full max-w-[24rem] grid-cols-2 gap-3 sm:w-auto sm:max-w-none sm:auto-cols-max sm:grid-flow-col sm:justify-center">
+      <div className="flex w-full max-w-[24rem] items-center justify-center">
         <Link
           href="/demo"
           className="story-primary-cta inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-[color:var(--story-primary-text)] sm:px-5"
         >
-          Start
+          View Demo
           <SfSymbol name="arrow-right" className="h-4 w-4" />
-        </Link>
-        <Link
-          href="/auth?mode=signin"
-          className="story-nav-secondary inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-[color:var(--story-ink)] sm:px-5"
-        >
-          <SfSymbol
-            name="rectangle-portrait-and-arrow-right"
-            className="h-4 w-4 sm:hidden"
-          />
-          Sign in
         </Link>
       </div>
 

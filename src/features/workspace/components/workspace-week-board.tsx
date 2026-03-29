@@ -1,30 +1,31 @@
-import Link from "next/link";
-import { SfSymbol } from "@/components/sf-symbol";
-import type { DashboardDay } from "@/features/workspace/content";
+import type { CSSProperties } from "react";
+import type { DashboardAssignment, DashboardDay } from "@/features/workspace/content";
+
+function getAssignmentSurfaceStyle(entry: DashboardAssignment) {
+  return {
+    "--entry-from-light": entry.surface.light.from,
+    "--entry-to-light": entry.surface.light.to,
+    "--entry-ink-light": entry.surface.light.ink,
+    "--entry-meta-light": entry.surface.light.meta,
+    "--entry-from-dark": entry.surface.dark.from,
+    "--entry-to-dark": entry.surface.dark.to,
+    "--entry-ink-dark": entry.surface.dark.ink,
+    "--entry-meta-dark": entry.surface.dark.meta,
+  } as CSSProperties;
+}
 
 export function WorkspaceWeekBoard({ days }: { days: DashboardDay[] }) {
   return (
     <section className="story-panel px-5 py-5 sm:px-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-            This week
-          </p>
-          <h3 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
-            Calm on the surface.
-          </h3>
-          <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-            One fairness risk remains. Everything else is ready to move.
-          </p>
-        </div>
-        <Link
-          href="/schedule"
-          className="story-cta-secondary inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-[color:var(--story-ink)]"
-        >
-          Open schedule
-          <SfSymbol name="arrow-right" className="h-[0.95rem] w-[0.95rem]" />
-        </Link>
-      </div>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
+        This week
+      </p>
+      <h3 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
+        Calm on the surface.
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
+        One fairness risk remains.
+      </p>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {days.map((day, index) => (
@@ -44,12 +45,19 @@ export function WorkspaceWeekBoard({ days }: { days: DashboardDay[] }) {
               {day.entries.map((entry) => (
                 <div
                   key={`${day.day}-${entry.time}-${entry.person}`}
-                  className={`story-demo-shift bg-gradient-to-br text-[color:var(--story-shift-ink)] ${entry.tone}`}
+                  className="story-demo-shift workspace-week-shift"
+                  style={getAssignmentSurfaceStyle(entry)}
                 >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--entry-meta,var(--story-shift-meta))]">
+                  <p
+                    data-entry-meta="true"
+                    className="text-[11px] font-semibold uppercase tracking-[0.18em]"
+                  >
                     {entry.time}
                   </p>
-                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--entry-meta,var(--story-shift-meta))]">
+                  <p
+                    data-entry-meta="true"
+                    className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em]"
+                  >
                     {entry.label}
                   </p>
                   <p className="mt-3 text-base font-semibold text-current">

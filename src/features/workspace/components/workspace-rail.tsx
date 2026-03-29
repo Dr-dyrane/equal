@@ -24,16 +24,18 @@ export function WorkspaceRail({
   fairness: FairnessLine[];
   nextSteps: StartupStep[];
 }) {
+  const primaryStep = nextSteps[0] ?? null;
+
   return (
     <div className="grid gap-4">
       <section className="story-panel px-5 py-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Needs attention
+              Today
             </p>
             <h3 className="mt-2 font-heading text-[1.85rem] leading-none text-[color:var(--story-ink)]">
-              Keep it moving.
+              What needs you.
             </h3>
           </div>
           <div className="story-fairness-indicator">
@@ -72,34 +74,32 @@ export function WorkspaceRail({
             </Link>
           ))}
         </div>
-      </section>
 
-      <section className="story-panel px-5 py-5">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-          Next to do
-        </p>
-        <div className="mt-4 space-y-3">
-          {nextSteps.map((step, index) => (
+        {primaryStep ? (
+          <div className="mt-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
+              Next step
+            </p>
             <Link
-              key={step.id}
-              href={step.href}
-              className="story-soft-card block px-4 py-4 transition hover:-translate-y-[1px]"
+              href={primaryStep.href}
+              className="story-soft-card mt-3 block px-4 py-4 transition hover:-translate-y-[1px]"
             >
               <div className="flex items-center justify-between gap-3">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--story-subtle)]">
-                  0{index + 1}
-                </span>
-                <span className="story-system-label">{step.owner}</span>
+                <span className="story-system-label">{primaryStep.owner}</span>
+                <SfSymbol
+                  name="arrow-right"
+                  className="h-[0.95rem] w-[0.95rem] text-[color:var(--story-subtle)]"
+                />
               </div>
               <p className="mt-3 text-sm font-semibold text-[color:var(--story-ink)]">
-                {step.title}
+                {primaryStep.title}
               </p>
               <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                {step.description}
+                {primaryStep.description}
               </p>
             </Link>
-          ))}
-        </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="story-panel px-5 py-5">
@@ -125,4 +125,3 @@ export function WorkspaceRail({
     </div>
   );
 }
-

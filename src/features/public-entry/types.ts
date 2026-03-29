@@ -21,7 +21,7 @@ export type LandingFairnessPreview = {
 
 export type LandingCopy = {
   eyebrow: string;
-  headline: string[];
+  headline: string;
   secondaryHeadline: string;
   previewEyebrow: string;
   previewHeading: string;

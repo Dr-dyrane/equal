@@ -37,10 +37,10 @@ export function ContextFab() {
           <div className="flex items-center justify-between gap-3 px-2 py-2">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-                Next actions
+                Actions
               </p>
               <p className="mt-1 text-sm text-[color:var(--story-muted)]">
-                What makes sense from here.
+                What you can do now.
               </p>
             </div>
             <button
@@ -111,7 +111,7 @@ export function ContextFab() {
         type="button"
         onClick={() => setQuickActionsOpen(!quickActionsOpen)}
         className="app-fab-button"
-        aria-label="Open next actions"
+        aria-label="Open actions"
       >
         <SfSymbol name="sparkles" variant="dualtone" className="h-[1.05rem] w-[1.05rem]" />
         {!isMobile ? (

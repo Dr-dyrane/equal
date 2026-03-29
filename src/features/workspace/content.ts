@@ -1,5 +1,4 @@
 import type { AppRole } from "@/lib/auth/claims";
-import { shellRoutes, type ShellRouteMeta } from "@/features/shell/config/navigation";
 import { startupRoutine } from "@/lib/startup-routine";
 
 export type DashboardMetric = {
@@ -12,7 +11,20 @@ export type DashboardAssignment = {
   time: string;
   label: string;
   person: string;
-  tone: string;
+  surface: {
+    light: {
+      from: string;
+      to: string;
+      ink: string;
+      meta: string;
+    };
+    dark: {
+      from: string;
+      to: string;
+      ink: string;
+      meta: string;
+    };
+  };
 };
 
 export type DashboardDay = {
@@ -64,15 +76,39 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Rest protected",
           person: "Lena Park",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#ffd7f1] to-[#f5c9ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#5a336d] dark:to-[#4a2e61] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#ffd7f1",
+              to: "#f5c9ff",
+              ink: "#22274d",
+              meta: "rgba(34, 39, 77, 0.72)",
+            },
+            dark: {
+              from: "#5a336d",
+              to: "#4a2e61",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
         {
           time: "19:00",
           label: "Night rotation",
           person: "Mia Cruz",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#d4d5ff] to-[#cbc7ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#2a2759] dark:to-[#24224f] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#d4d5ff",
+              to: "#cbc7ff",
+              ink: "#22274d",
+              meta: "rgba(34, 39, 77, 0.72)",
+            },
+            dark: {
+              from: "#2a2759",
+              to: "#24224f",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
       ],
     },
@@ -84,15 +120,39 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Coverage ready",
           person: "Owen Diaz",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#c8eeff] to-[#bce8ff] text-[#18324b] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#173f59] dark:to-[#15364b] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#c8eeff",
+              to: "#bce8ff",
+              ink: "#18324b",
+              meta: "rgba(24, 50, 75, 0.72)",
+            },
+            dark: {
+              from: "#173f59",
+              to: "#15364b",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
         {
           time: "19:00",
           label: "Fair rotation",
           person: "Kai Morgan",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#e0d0ff] to-[#d3c4ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#37245d] dark:to-[#2f214f] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#e0d0ff",
+              to: "#d3c4ff",
+              ink: "#22274d",
+              meta: "rgba(34, 39, 77, 0.72)",
+            },
+            dark: {
+              from: "#37245d",
+              to: "#2f214f",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
       ],
     },
@@ -104,15 +164,39 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Balanced seniority",
           person: "June Hall",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#e8f0ff] to-[#dfe7ff] text-[#223454] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#213052] dark:to-[#1d2946] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#e8f0ff",
+              to: "#dfe7ff",
+              ink: "#223454",
+              meta: "rgba(34, 52, 84, 0.72)",
+            },
+            dark: {
+              from: "#213052",
+              to: "#1d2946",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
         {
           time: "19:00",
           label: "Recovery gap",
           person: "Mia Cruz",
-          tone:
-            "[--entry-meta:rgba(34,39,77,0.66)] from-[#c9f2ff] to-[#c4f7f1] text-[#1d4052] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#14465a] dark:to-[#153f49] dark:text-[#f6fbff]",
+          surface: {
+            light: {
+              from: "#c9f2ff",
+              to: "#c4f7f1",
+              ink: "#1d4052",
+              meta: "rgba(29, 64, 82, 0.72)",
+            },
+            dark: {
+              from: "#14465a",
+              to: "#153f49",
+              ink: "#f6fbff",
+              meta: "rgba(246, 251, 255, 0.82)",
+            },
+          },
         },
       ],
     },
@@ -193,11 +277,4 @@ export function getRoleSteps(role: AppRole) {
   return ROLE_STEP_MAP[role]
     .map((id) => startupRoutine.find((step) => step.id === id))
     .filter((step): step is (typeof startupRoutine)[number] => Boolean(step));
-}
-
-export function getWorkspaceModules() {
-  return shellRoutes.filter(
-    (route): route is ShellRouteMeta =>
-      route.key !== "workspace" && route.key !== "onboarding",
-  );
 }
