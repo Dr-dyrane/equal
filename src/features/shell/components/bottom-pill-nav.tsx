@@ -7,11 +7,13 @@ import {
   primaryNavigation,
 } from "@/features/shell/config/navigation";
 import { useLayout } from "@/providers/layout-provider";
+import { useUI } from "@/providers/ui-provider";
 
 export function BottomPillNav({ pathname }: { pathname: string }) {
   const { isMobile } = useLayout();
+  const { quickActionsOpen } = useUI();
 
-  if (!isMobile) {
+  if (!isMobile || quickActionsOpen) {
     return null;
   }
 

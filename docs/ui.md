@@ -591,6 +591,50 @@ Before approving a screen, check this directly:
 - Is spacing, tone, and elevation doing the work first? If no, redesign before shipping.
 - Are rings being used because the layout lacks confidence? If yes, fix the layout instead.
 
+## Internal page review
+
+For every app page, review more than the static screenshot.
+
+Ask these questions before calling a screen finished:
+
+- What story is the page telling in the first frame?
+- What is the primary action?
+- What should the user notice first, second, and third?
+- Is the screen helping the user act, or just showing product structure?
+- Would the screen still make sense with half the explanatory copy removed?
+
+State flow:
+
+- What does the page look like before data arrives?
+- What does it look like when data is empty, partial, stale, or failed?
+- What changes when the user selects, edits, confirms, or publishes?
+- Does the motion explain the state change, or just decorate it?
+- Is supporting detail deferred into a sheet, drawer, or nested page instead of dumped into the main surface?
+
+Layout and DOM:
+
+- Avoid wrapper-in-wrapper-in-wrapper fixes.
+- If a region feels stretched, the layout is wrong before the styling is wrong.
+- A selector should read like a selector, not a full card if it is only choosing context.
+- A sheet should be a real layer, not a floating panel clipped by the page beneath it.
+- Use rounded sheets and drawers for helper actions instead of stacking more surfaces into the main page.
+- If the DOM tree is large because of layout habit rather than meaning or interaction, collapse it.
+
+JS and client load:
+
+- Do not make a whole route client-heavy just to support one local interaction.
+- Keep server-rendered structure where possible and isolate client behavior to the smallest useful surface.
+- Shared shell behaviors should use reusable primitives, not one-off page logic.
+- If an interaction is repeated across pages, extract it into a shared component before the third copy appears.
+
+Apple HIG check:
+
+- Is the screen single-focus?
+- Is the chrome quieter than the content?
+- Do helper actions come in sheets or drawers instead of fighting the main surface?
+- Is the page understandable without explanation?
+- Would Apple ship this with fewer visible controls and clearer hierarchy?
+
 ## Screen review checklist
 
 Before shipping a screen, answer yes to all of these:

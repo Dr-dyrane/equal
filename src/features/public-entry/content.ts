@@ -11,8 +11,8 @@ import type {
 
 export const landingCopy: LandingCopy = {
   eyebrow: "Work, balanced.",
-  headline: "Equal",
-  secondaryHeadline: "by Dyrane",
+  headline: "Equal.",
+  secondaryHeadline: "Fair schedules. Automatically.",
   previewEyebrow: "This week",
   previewHeading: "Calm on the surface. Fair underneath.",
   fairness: {

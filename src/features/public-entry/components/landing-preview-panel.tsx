@@ -59,7 +59,7 @@ export function LandingPreviewPanel({
         ))}
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      {/* <div className="mt-4 flex flex-wrap gap-2">
         {signals.map((signal, index) => (
           <PublicSystemLabel
             key={signal}
@@ -69,7 +69,7 @@ export function LandingPreviewPanel({
             {signal}
           </PublicSystemLabel>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }

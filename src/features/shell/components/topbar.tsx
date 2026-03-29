@@ -17,7 +17,7 @@ export function Topbar({ pathname }: { pathname: string }) {
   const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
 
   return (
-    <header className="app-shell-topbar sticky top-4 z-20 px-4 py-4 sm:px-5">
+    <header className="app-shell-topbar relative z-10 px-4 py-4 sm:px-5">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           {!isDesktop ? (
