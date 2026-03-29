@@ -1,5 +1,5 @@
 import type { FairnessComparisonMode, FairnessWindow } from "@/features/fairness/provider/fairness-provider";
-import type { RosterStage } from "@/features/roster-builder/provider/roster-builder-provider";
+import type { RosterStage } from "@/features/roster-builder/types";
 
 export type ScheduleMetric = {
   label: string;
@@ -45,6 +45,26 @@ export type ScheduleNote = {
   tone: "primary" | "secondary" | "success";
 };
 
+export type ScheduleAssignmentOption = {
+  person: string;
+  note: string;
+  outcome: string;
+  recommended?: boolean;
+};
+
+export type ScheduleDecisionState = {
+  person: string;
+  resolved: boolean;
+  daySummary: string;
+  emphasis: string;
+  fairness: string;
+  readiness: string;
+  note: string;
+};
+
+export const SCHEDULE_DECISION_SHIFT_ID = "tue-3";
+export const SCHEDULE_DECISION_DEFAULT_PERSON = "Mia Cruz";
+
 export const scheduleActions = [
   {
     id: "review",
@@ -60,6 +80,25 @@ export const scheduleActions = [
     id: "publish",
     label: "Publish",
     detail: "Send the roster.",
+  },
+] as const;
+
+const scheduleDecisionOptions: ScheduleAssignmentOption[] = [
+  {
+    person: SCHEDULE_DECISION_DEFAULT_PERSON,
+    note: "Current load",
+    outcome: "Still needs review.",
+  },
+  {
+    person: "Ava Brooks",
+    note: "Best balance",
+    outcome: "Ready to send.",
+    recommended: true,
+  },
+  {
+    person: "Noah Kent",
+    note: "Night cover",
+    outcome: "Keeps nights even.",
   },
 ] as const;
 
@@ -417,7 +456,20 @@ const baseDays: ScheduleDay[] = [
 ];
 
 export function getScheduleMetrics(stage: RosterStage): ScheduleMetric[] {
-  const publishValue = stage === "published" ? "Published" : "1 unresolved";
+  const publishValue =
+    stage === "published" ? "Published" : stage === "ready" ? "Ready" : "1 unresolved";
+  const fairnessValue =
+    stage === "draft" ? "90.4" : stage === "reviewing" ? "93.8" : "95.1";
+  const fairnessDetail =
+    stage === "ready" || stage === "published"
+      ? "Night load is back in range."
+      : "Tuesday night still leans hard.";
+  const readinessDetail =
+    stage === "published"
+      ? "Roster is out."
+      : stage === "ready"
+        ? "Ready to send."
+        : "One call left.";
 
   return [
     {
@@ -428,27 +480,104 @@ export function getScheduleMetrics(stage: RosterStage): ScheduleMetric[] {
     },
     {
       label: "Fairness",
-      value: stage === "draft" ? "90.4" : stage === "reviewing" ? "93.8" : "95.1",
-      detail: "Tuesday night still leans hard.",
+      value: fairnessValue,
+      detail: fairnessDetail,
       tone: "primary",
     },
     {
       label: "Readiness",
       value: publishValue,
-      detail: "One call left.",
+      detail: readinessDetail,
       tone: "warning",
     },
   ];
 }
 
-export function getScheduleDays(selectedDay: string): ScheduleDay[] {
-  return baseDays.map((day) =>
-    day.day === selectedDay
-      ? day
-      : {
-          ...day,
-        },
-  );
+export function getScheduleDecisionState(person: string): ScheduleDecisionState {
+  if (person === "Ava Brooks") {
+    return {
+      person,
+      resolved: true,
+      daySummary: "Ready to send",
+      emphasis: "Recovery gap closed",
+      fairness: "95.1",
+      readiness: "Ready",
+      note: "Night load evens out.",
+    };
+  }
+
+  if (person === "Noah Kent") {
+    return {
+      person,
+      resolved: true,
+      daySummary: "Ready to send",
+      emphasis: "Night cover balanced",
+      fairness: "94.6",
+      readiness: "Ready",
+      note: "Night cover stays even.",
+    };
+  }
+
+  return {
+    person: SCHEDULE_DECISION_DEFAULT_PERSON,
+    resolved: false,
+    daySummary: "Needs judgment",
+    emphasis: "Back-to-back risk",
+    fairness: "93.8",
+    readiness: "1 left",
+    note: "Still needs review.",
+  };
+}
+
+export function getScheduleAssignmentOptions(
+  shiftId: string,
+  currentPerson: string,
+): readonly ScheduleAssignmentOption[] {
+  if (shiftId === SCHEDULE_DECISION_SHIFT_ID) {
+    return scheduleDecisionOptions;
+  }
+
+  return [
+    {
+      person: currentPerson,
+      note: "Assigned now",
+      outcome: "Looks good.",
+    },
+  ];
+}
+
+export function getScheduleDays(
+  _selectedDay: string,
+  decisionPerson = SCHEDULE_DECISION_DEFAULT_PERSON,
+): ScheduleDay[] {
+  const decision = getScheduleDecisionState(decisionPerson);
+
+  return baseDays.map((day) => {
+    const shifts = day.shifts.map((shift) => {
+      if (shift.id !== SCHEDULE_DECISION_SHIFT_ID) {
+        return { ...shift };
+      }
+
+      return {
+        ...shift,
+        person: decision.person,
+        emphasis: decision.emphasis,
+      };
+    });
+
+    if (day.day !== "Tuesday") {
+      return {
+        ...day,
+        shifts,
+      };
+    }
+
+    return {
+      ...day,
+      summary: decision.daySummary,
+      shifts,
+    };
+  });
 }
 
 export function getScheduleSummary(stage: RosterStage) {
@@ -509,24 +638,46 @@ export function getScheduleFocus(
   ] as const;
 }
 
-export function getScheduleNotes(explanationPanelOpen: boolean): ScheduleNote[] {
-  const notes: ScheduleNote[] = [
-    {
-      name: "Mia Cruz",
-      note: "Tuesday night still leans hard.",
-      tone: "secondary",
-    },
-    {
-      name: "Kai Morgan",
-      note: "Weekend load stays even.",
-      tone: "primary",
-    },
-    {
-      name: "Lena Park",
-      note: "Rest stays protected.",
-      tone: "success",
-    },
-  ];
+export function getScheduleNotes(
+  explanationPanelOpen: boolean,
+  decisionPerson = SCHEDULE_DECISION_DEFAULT_PERSON,
+): ScheduleNote[] {
+  const decision = getScheduleDecisionState(decisionPerson);
+  const notes: ScheduleNote[] = decision.resolved
+    ? [
+        {
+          name: decision.person,
+          note: decision.note,
+          tone: "success",
+        },
+        {
+          name: "Mia Cruz",
+          note: "Night load returns to baseline.",
+          tone: "primary",
+        },
+        {
+          name: "Lena Park",
+          note: "Rest stays protected.",
+          tone: "success",
+        },
+      ]
+    : [
+        {
+          name: "Mia Cruz",
+          note: "Tuesday night still leans hard.",
+          tone: "secondary",
+        },
+        {
+          name: "Kai Morgan",
+          note: "Weekend load stays even.",
+          tone: "primary",
+        },
+        {
+          name: "Lena Park",
+          note: "Rest stays protected.",
+          tone: "success",
+        },
+      ];
 
   return explanationPanelOpen ? notes : notes.slice(0, 2);
 }

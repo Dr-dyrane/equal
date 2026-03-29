@@ -17,19 +17,19 @@ export function Topbar({ pathname }: { pathname: string }) {
   const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
 
   return (
-    <header className="app-shell-topbar relative z-10 px-4 py-4 sm:px-5">
+    <header className="app-shell-topbar relative z-10 px-4 py-3 sm:px-5 sm:py-4">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          {!isDesktop ? (
-            <div className="mb-4">
+          {!isDesktop && !isMobile ? (
+            <div className="mb-3">
               <ShellBrandLink compact={isMobile} showWordmark={!isMobile} />
             </div>
           ) : null}
 
-          <h1 className="mt-2 text-balance font-heading text-[2rem] leading-[0.98] text-[color:var(--story-ink)] sm:text-[2.35rem]">
+          <h1 className="text-balance font-heading text-[1.85rem] leading-[0.98] text-[color:var(--story-ink)] sm:text-[2.35rem]">
             {currentRoute.label}
           </h1>
-          <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)] sm:text-base">
+          <p className="mt-1 text-sm leading-6 text-[color:var(--story-muted)] sm:mt-3 sm:text-base">
             {activeTeam.name} <span aria-hidden="true">&middot;</span> {activeSite.name}
           </p>
         </div>

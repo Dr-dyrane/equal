@@ -1,4 +1,6 @@
 import type { AppRole } from "@/lib/auth/claims";
+import type { ScheduleDay } from "@/features/roster-builder/content";
+import type { RosterStage } from "@/features/roster-builder/types";
 import { startupRoutine } from "@/lib/startup-routine";
 
 export type DashboardMetric = {
@@ -46,12 +48,23 @@ export type FairnessLine = {
   tone: string;
 };
 
-export function getDashboardMetrics(): DashboardMetric[] {
+export function getDashboardMetrics(stage: RosterStage): DashboardMetric[] {
+  const readinessValue =
+    stage === "published" ? "Out" : stage === "ready" ? "Ready" : "1 left";
+  const fairnessValue =
+    stage === "draft" ? "90.4" : stage === "reviewing" ? "93.8" : "95.1";
+  const readinessDetail =
+    stage === "published"
+      ? "Roster is sent."
+      : stage === "ready"
+        ? "Week can go out."
+        : "Tuesday still needs a call.";
+
   return [
     {
       label: "Fairness",
-      value: "92%",
-      detail: "One review left.",
+      value: fairnessValue,
+      detail: stage === "published" ? "Week stayed even." : "Night load stays in range.",
     },
     {
       label: "Coverage",
@@ -59,158 +72,48 @@ export function getDashboardMetrics(): DashboardMetric[] {
       detail: "Critical roles covered.",
     },
     {
-      label: "Swaps",
-      value: "04",
-      detail: "One needs review.",
+      label: "Ready",
+      value: readinessValue,
+      detail: readinessDetail,
     },
   ];
 }
 
-export function getDashboardDays(): DashboardDay[] {
-  return [
-    {
-      day: "Mon",
-      summary: "Rest protected",
-      entries: [
-        {
-          time: "07:00",
-          label: "Rest protected",
-          person: "Lena Park",
-          surface: {
-            light: {
-              from: "#ffd7f1",
-              to: "#f5c9ff",
-              ink: "#22274d",
-              meta: "rgba(34, 39, 77, 0.72)",
-            },
-            dark: {
-              from: "#5a336d",
-              to: "#4a2e61",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-        {
-          time: "19:00",
-          label: "Night rotation",
-          person: "Mia Cruz",
-          surface: {
-            light: {
-              from: "#d4d5ff",
-              to: "#cbc7ff",
-              ink: "#22274d",
-              meta: "rgba(34, 39, 77, 0.72)",
-            },
-            dark: {
-              from: "#2a2759",
-              to: "#24224f",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-      ],
-    },
-    {
-      day: "Tue",
-      summary: "Coverage ready",
-      entries: [
-        {
-          time: "07:00",
-          label: "Coverage ready",
-          person: "Owen Diaz",
-          surface: {
-            light: {
-              from: "#c8eeff",
-              to: "#bce8ff",
-              ink: "#18324b",
-              meta: "rgba(24, 50, 75, 0.72)",
-            },
-            dark: {
-              from: "#173f59",
-              to: "#15364b",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-        {
-          time: "19:00",
-          label: "Fair rotation",
-          person: "Kai Morgan",
-          surface: {
-            light: {
-              from: "#e0d0ff",
-              to: "#d3c4ff",
-              ink: "#22274d",
-              meta: "rgba(34, 39, 77, 0.72)",
-            },
-            dark: {
-              from: "#37245d",
-              to: "#2f214f",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-      ],
-    },
-    {
-      day: "Wed",
-      summary: "Recovery gap",
-      entries: [
-        {
-          time: "07:00",
-          label: "Balanced seniority",
-          person: "June Hall",
-          surface: {
-            light: {
-              from: "#e8f0ff",
-              to: "#dfe7ff",
-              ink: "#223454",
-              meta: "rgba(34, 52, 84, 0.72)",
-            },
-            dark: {
-              from: "#213052",
-              to: "#1d2946",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-        {
-          time: "19:00",
-          label: "Recovery gap",
-          person: "Mia Cruz",
-          surface: {
-            light: {
-              from: "#c9f2ff",
-              to: "#c4f7f1",
-              ink: "#1d4052",
-              meta: "rgba(29, 64, 82, 0.72)",
-            },
-            dark: {
-              from: "#14465a",
-              to: "#153f49",
-              ink: "#f6fbff",
-              meta: "rgba(246, 251, 255, 0.82)",
-            },
-          },
-        },
-      ],
-    },
-  ];
+export function getDashboardDays(days: ScheduleDay[]): DashboardDay[] {
+  return days.slice(0, 3).map((day) => ({
+    day: day.day.slice(0, 3),
+    summary: day.summary,
+    entries: day.shifts.slice(0, 2).map((shift) => ({
+      time: shift.time.split(" - ")[0] ?? shift.time,
+      label: shift.emphasis,
+      person: shift.person,
+      surface: shift.surface,
+    })),
+  }));
 }
 
-export function getAttentionItems(role: AppRole): AttentionItem[] {
+export function getAttentionItems(input: {
+  role: AppRole;
+  stage: RosterStage;
+  unresolvedConflictCount: number;
+}): AttentionItem[] {
   const base: AttentionItem[] = [
-    {
-      title: "Fairness drift",
-      detail: "Tuesday night leans hard on Mia.",
-      href: "/schedule",
-      tone: "warning",
-    },
+    input.unresolvedConflictCount > 0
+      ? {
+          title: "Fairness drift",
+          detail: "Tuesday night still leans hard.",
+          href: "/schedule",
+          tone: "warning",
+        }
+      : {
+          title: "Week is ready",
+          detail:
+            input.stage === "published"
+              ? "Roster is already out."
+              : "The hardest call is closed.",
+          href: "/schedule",
+          tone: "primary",
+        },
     {
       title: "Preference gaps",
       detail: "Availability still needs updates.",
@@ -225,7 +128,7 @@ export function getAttentionItems(role: AppRole): AttentionItem[] {
     },
   ];
 
-  if (role === "staff" || role === "observer") {
+  if (input.role === "staff" || input.role === "observer") {
     return [
       {
         title: "Week is ready",
@@ -245,13 +148,22 @@ export function getAttentionItems(role: AppRole): AttentionItem[] {
   return base;
 }
 
-export function getFairnessLines(): FairnessLine[] {
+export function getFairnessLines(decisionPerson: string): FairnessLine[] {
+  const leadLine =
+    decisionPerson === "Mia Cruz"
+      ? {
+          name: "Mia Cruz",
+          detail: "One extra night.",
+          tone: "text-[color:var(--story-brand-pink)]",
+        }
+      : {
+          name: decisionPerson,
+          detail: "Tuesday night is balanced.",
+          tone: "text-[color:var(--story-brand-blue)]",
+        };
+
   return [
-    {
-      name: "Mia Cruz",
-      detail: "One extra night.",
-      tone: "text-[color:var(--story-brand-pink)]",
-    },
+    leadLine,
     {
       name: "Kai Morgan",
       detail: "Weekend load is even.",
