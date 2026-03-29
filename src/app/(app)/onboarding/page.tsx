@@ -1,6 +1,5 @@
-import { RouteOverviewPage } from "@/features/route-overview/components/route-overview-page";
-import { onboardingOverview } from "@/features/route-overview/content";
+import { OnboardingWorkspace } from "@/features/onboarding/components/onboarding-workspace";
 
 export default function OnboardingPage() {
-  return <RouteOverviewPage content={onboardingOverview} />;
+  return <OnboardingWorkspace />;
 }

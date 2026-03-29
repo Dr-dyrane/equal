@@ -1,6 +1,5 @@
-import { RouteOverviewPage } from "@/features/route-overview/components/route-overview-page";
-import { shiftsOverview } from "@/features/route-overview/content";
+import { ShiftsWorkspace } from "@/features/shifts/components/shifts-workspace";
 
 export default function ShiftsPage() {
-  return <RouteOverviewPage content={shiftsOverview} />;
+  return <ShiftsWorkspace />;
 }
