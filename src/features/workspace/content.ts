@@ -64,13 +64,15 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Rest protected",
           person: "Lena Park",
-          tone: "from-[#ffd7f1] to-[#f5c9ff] dark:from-[#5a336d] dark:to-[#4a2e61]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#ffd7f1] to-[#f5c9ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#5a336d] dark:to-[#4a2e61] dark:text-[#f6fbff]",
         },
         {
           time: "19:00",
           label: "Night rotation",
           person: "Mia Cruz",
-          tone: "from-[#d4d5ff] to-[#cbc7ff] dark:from-[#2a2759] dark:to-[#24224f]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#d4d5ff] to-[#cbc7ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#2a2759] dark:to-[#24224f] dark:text-[#f6fbff]",
         },
       ],
     },
@@ -82,13 +84,15 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Coverage ready",
           person: "Owen Diaz",
-          tone: "from-[#c8eeff] to-[#bce8ff] dark:from-[#173f59] dark:to-[#15364b]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#c8eeff] to-[#bce8ff] text-[#18324b] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#173f59] dark:to-[#15364b] dark:text-[#f6fbff]",
         },
         {
           time: "19:00",
           label: "Fair rotation",
           person: "Kai Morgan",
-          tone: "from-[#e0d0ff] to-[#d3c4ff] dark:from-[#37245d] dark:to-[#2f214f]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#e0d0ff] to-[#d3c4ff] text-[#22274d] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#37245d] dark:to-[#2f214f] dark:text-[#f6fbff]",
         },
       ],
     },
@@ -100,13 +104,15 @@ export function getDashboardDays(): DashboardDay[] {
           time: "07:00",
           label: "Balanced seniority",
           person: "June Hall",
-          tone: "from-[#e8f0ff] to-[#dfe7ff] dark:from-[#213052] dark:to-[#1d2946]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#e8f0ff] to-[#dfe7ff] text-[#223454] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#213052] dark:to-[#1d2946] dark:text-[#f6fbff]",
         },
         {
           time: "19:00",
           label: "Recovery gap",
           person: "Mia Cruz",
-          tone: "from-[#c9f2ff] to-[#c4f7f1] dark:from-[#14465a] dark:to-[#153f49]",
+          tone:
+            "[--entry-meta:rgba(34,39,77,0.66)] from-[#c9f2ff] to-[#c4f7f1] text-[#1d4052] dark:[--entry-meta:rgba(246,251,255,0.78)] dark:from-[#14465a] dark:to-[#153f49] dark:text-[#f6fbff]",
         },
       ],
     },

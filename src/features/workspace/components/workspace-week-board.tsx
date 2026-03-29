@@ -44,15 +44,15 @@ export function WorkspaceWeekBoard({ days }: { days: DashboardDay[] }) {
               {day.entries.map((entry) => (
                 <div
                   key={`${day.day}-${entry.time}-${entry.person}`}
-                  className={`story-demo-shift bg-gradient-to-br ${entry.tone}`}
+                  className={`story-demo-shift bg-gradient-to-br text-[color:var(--story-shift-ink)] ${entry.tone}`}
                 >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--story-shift-meta)]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--entry-meta,var(--story-shift-meta))]">
                     {entry.time}
                   </p>
-                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--story-shift-meta)]">
+                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[color:var(--entry-meta,var(--story-shift-meta))]">
                     {entry.label}
                   </p>
-                  <p className="mt-3 text-base font-semibold text-[color:var(--story-shift-ink)]">
+                  <p className="mt-3 text-base font-semibold text-current">
                     {entry.person}
                   </p>
                 </div>
@@ -64,4 +64,3 @@ export function WorkspaceWeekBoard({ days }: { days: DashboardDay[] }) {
     </section>
   );
 }
-
