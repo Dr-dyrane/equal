@@ -2,34 +2,76 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { SfSymbol } from "@/components/sf-symbol";
 import { getAuthContent } from "@/features/public-entry/content";
 import { AuthModeSwitch } from "@/features/public-entry/components/auth-mode-switch";
 import { PublicThemeToggle } from "@/features/public-entry/components/public-theme-toggle";
 import { PublicRouteFrame } from "@/features/public-entry/components/public-route-frame";
-import { createPublicSession } from "@/features/public-entry/lib/public-session";
 import type { AuthMode } from "@/features/public-entry/types";
-import { useAuth } from "@/providers/auth-provider";
+import {
+  authStartSchema,
+  type AuthStartInput,
+  type AuthStartResult,
+} from "@/lib/contracts/auth";
 
-export function AuthEntryView({ mode }: { mode: AuthMode }) {
+export function AuthEntryView({
+  mode,
+  errorMessage,
+  nextPath,
+}: {
+  mode: AuthMode;
+  errorMessage?: string;
+  nextPath?: string;
+}) {
   const router = useRouter();
-  const { replaceSession, user } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState(user?.email ?? "");
-  const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
   const content = getAuthContent(mode);
+  const form = useForm<AuthStartInput>({
+    resolver: zodResolver(authStartSchema),
+    defaultValues: {
+      mode,
+      email: "",
+      next: nextPath,
+      name: "",
+    },
+  });
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(values: AuthStartInput) {
+    setSubmissionError(null);
+    setSentTo(null);
 
-    if (!email.trim()) {
+    const response = await fetch("/api/auth/start", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...values,
+        mode,
+      }),
+    });
+
+    const payload = (await response.json()) as
+      | AuthStartResult
+      | { error?: string; message?: string };
+
+    if (!response.ok || !("ok" in payload) || payload.ok !== true) {
+      setSubmissionError(
+        "message" in payload ? payload.message ?? "Could not start auth." : "Could not start auth.",
+      );
       return;
     }
 
-    setSubmitting(true);
-    replaceSession(createPublicSession(email.trim(), name, mode));
-    router.push(content.destination);
+    if (payload.verifyUrl) {
+      router.push(payload.verifyUrl);
+      return;
+    }
+
+    setSentTo(payload.emailedTo);
   }
 
   return (
@@ -57,20 +99,25 @@ export function AuthEntryView({ mode }: { mode: AuthMode }) {
             {content.description}
           </p>
 
-          <form className="mt-8 grid gap-4" onSubmit={handleSubmit}>
+          <form className="mt-8 grid gap-4" onSubmit={form.handleSubmit(handleSubmit)}>
+            <input type="hidden" {...form.register("next")} />
             {content.showNameField ? (
               <label className="grid gap-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--story-subtle)]">
                   Your name
                 </span>
                 <input
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
                   type="text"
                   autoComplete="name"
                   placeholder={content.namePlaceholder}
                   className="story-input"
+                  {...form.register("name")}
                 />
+                {form.formState.errors.name ? (
+                  <span className="text-sm text-rose-500">
+                    {form.formState.errors.name.message}
+                  </span>
+                ) : null}
               </label>
             ) : null}
 
@@ -79,25 +126,39 @@ export function AuthEntryView({ mode }: { mode: AuthMode }) {
                 Work email
               </span>
               <input
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
                 type="email"
                 autoComplete="email"
                 placeholder={content.emailPlaceholder}
                 required
                 className="story-input"
+                {...form.register("email")}
               />
+              {form.formState.errors.email ? (
+                <span className="text-sm text-rose-500">
+                  {form.formState.errors.email.message}
+                </span>
+              ) : null}
             </label>
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={form.formState.isSubmitting}
               className="story-primary-cta mt-2 inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-primary-text)] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {submitting ? "Opening..." : content.cta}
+              {form.formState.isSubmitting
+                ? "Opening..."
+                : sentTo
+                  ? "Email sent"
+                  : content.cta}
               <SfSymbol name="arrow-right" className="h-4 w-4" />
             </button>
           </form>
+
+          {errorMessage || submissionError || sentTo ? (
+            <p className="mt-4 text-sm text-[color:var(--story-muted)]">
+              {submissionError ?? errorMessage ?? `Check ${sentTo} for the link.`}
+            </p>
+          ) : null}
         </section>
 
         <footer className="story-footer-surface story-reveal flex w-full flex-col gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-5">

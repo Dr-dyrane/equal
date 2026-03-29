@@ -26,9 +26,9 @@ export function PublicHeader({
   return (
     <header className="story-header story-reveal flex items-center justify-between gap-3 px-3 py-2.5 md:px-4 md:py-3">
       <Link href="/" className="flex min-w-0 items-center gap-3">
-        <div className="story-logo-well flex h-11 w-11 shrink-0 items-center justify-center">
+        <div className="story-logo-well flex h-11 w-11 shrink-0 items-center justify-center bg-muted/20">
           <Image
-            src="/brand/hero.png"
+            src="/brand/logo.png"
             alt="Equal"
             width={24}
             height={24}

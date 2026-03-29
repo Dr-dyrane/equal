@@ -1,6 +1,6 @@
 # Milestone 01: Core Platform
 
-This is the first concrete execution milestone after public-entry foundation work.
+This is the first concrete execution milestone after the public-entry foundation.
 
 It combines authentication, schema, migrations, and route protection into one coherent platform layer.
 
@@ -9,9 +9,10 @@ It combines authentication, schema, migrations, and route protection into one co
 By the end of this milestone:
 
 - the app has a real database schema
-- the app has real auth/session flow
+- the app has real auth and session flow
 - protected routes are actually protected
 - public auth UI is backed by real behavior
+- landing and demo remain static-first
 
 ## Scope
 
@@ -42,9 +43,14 @@ src/db/schema/fairness.ts
 
 ### 2. Create squashed migrations
 
-Create only:
+Bootstrap with a small migration set.
 
-- `0000_core_identity`
+Current generated and applied migration:
+
+- `0000_nostalgic_slipstream`
+
+Target follow-up pattern:
+
 - `0001_people_structure`
 - `0002_scheduling_core`
 - `0003_rules_fairness_audit`
@@ -61,14 +67,16 @@ src/lib/auth/claims.ts
 src/lib/auth/session.ts
 src/lib/auth/guards.ts
 src/lib/auth/errors.ts
+src/lib/contracts/auth.ts
 src/server/repositories/auth-repo.ts
 src/server/repositories/org-repo.ts
 src/server/services/auth/start-auth.ts
 src/server/services/auth/verify-auth.ts
 src/server/services/auth/signout.ts
+src/server/services/auth/get-auth-session.ts
 src/app/api/auth/start/route.ts
-src/app/api/auth/verify/route.ts
 src/app/api/auth/signout/route.ts
+src/app/(public)/auth/verify/route.ts
 middleware.ts
 ```
 
@@ -76,9 +84,9 @@ middleware.ts
 
 Update `/auth` to:
 
-- call real start-auth endpoint
+- call the real start-auth endpoint
 - show submission and error states
-- stop fabricating local session as the final source of truth
+- stop fabricating local session as the source of truth
 
 Keep:
 
@@ -92,39 +100,43 @@ Update:
 
 - `AuthProvider`
 - protected route layout
-- redirect rules for authenticated vs anonymous states
+- redirect rules for authenticated versus anonymous states
+- root versus route-group layout ownership
 
 ## Exact Acceptance Checklist
 
 ### Schema
 
-- [ ] Drizzle is configured
-- [ ] Neon client is wired
-- [ ] schema is exported from one universal index
-- [ ] migrations are generated and committed
+- [x] Drizzle is configured
+- [x] Neon client is wired
+- [x] schema is exported from one universal index
+- [x] bootstrap migration is generated
+- [x] bootstrap migration is applied to Neon
 
 ### Auth
 
-- [ ] `/auth` can submit work email
-- [ ] auth start sends Postmark email
-- [ ] verify route consumes signed token
-- [ ] verify route sets secure HttpOnly cookie
-- [ ] signout clears cookie
+- [x] `/auth` can submit work email
+- [x] auth start sends Postmark email
+- [x] verify route consumes signed token
+- [x] verify route sets secure HttpOnly cookie
+- [x] signout clears cookie
 
 ### Protected app
 
-- [ ] `(app)` route group exists
-- [ ] middleware blocks anonymous access to protected routes
-- [ ] authenticated users can reach protected routes
-- [ ] session survives refresh
+- [x] `(app)` route group exists
+- [x] `(public)` route group exists
+- [x] middleware blocks anonymous access to protected routes
+- [x] authenticated users can reach protected routes
+- [x] session survives refresh
+- [x] landing and demo are static again
 
 ### Quality
 
-- [ ] no provider bloat added
-- [ ] no migration bloat added
-- [ ] lint passes
-- [ ] typecheck passes
-- [ ] build passes
+- [x] no provider bloat added
+- [x] no migration bloat added
+- [x] lint passes
+- [x] typecheck passes
+- [x] build passes
 
 ## Risks To Watch
 

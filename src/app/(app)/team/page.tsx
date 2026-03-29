@@ -58,7 +58,7 @@ export default function TeamPage() {
           items: [
             "Unavailable dates, preferred shifts, and notes.",
             "Swap eligibility shaped by state and role permissions.",
-            "Self-serve updates without exposing other people’s schedules.",
+            "Self-serve updates without exposing other people's schedules.",
           ],
         },
       ]}

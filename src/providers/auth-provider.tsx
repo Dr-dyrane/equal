@@ -1,33 +1,14 @@
 "use client";
 
-import { createContext, useContext } from "react";
-import { usePersistentState } from "@/providers/use-persistent-state";
-
-export type AppRole =
-  | "owner"
-  | "admin"
-  | "scheduler"
-  | "staff"
-  | "observer";
-
-export type AppUser = {
-  id: string;
-  email: string;
-  name: string;
-  role: AppRole;
-};
-
-export type AppSession = {
-  user: AppUser;
-  issuedAt: string;
-};
+import { createContext, useContext, useEffect, useState } from "react";
+import type { AppRole, AppSession, AppUser } from "@/lib/auth/claims";
 
 type AuthContextValue = {
   session: AppSession | null;
   user: AppUser | null;
   status: "authenticated" | "anonymous";
   replaceSession: (session: AppSession | null) => void;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -39,10 +20,11 @@ export function AuthProvider({
   children: React.ReactNode;
   initialSession?: AppSession | null;
 }) {
-  const [session, setSession] = usePersistentState<AppSession | null>(
-    "equal.auth.session",
-    initialSession,
-  );
+  const [session, setSession] = useState<AppSession | null>(initialSession);
+
+  useEffect(() => {
+    setSession(initialSession);
+  }, [initialSession]);
 
   return (
     <AuthContext.Provider
@@ -51,7 +33,19 @@ export function AuthProvider({
         user: session?.user ?? null,
         status: session ? "authenticated" : "anonymous",
         replaceSession: setSession,
-        signOut: () => setSession(null),
+        signOut: async () => {
+          try {
+            await fetch("/api/auth/signout", {
+              method: "POST",
+            });
+          } finally {
+            setSession(null);
+
+            if (typeof window !== "undefined") {
+              window.location.assign("/");
+            }
+          }
+        },
       }}
     >
       {children}
@@ -68,3 +62,5 @@ export function useAuth() {
 
   return context;
 }
+
+export type { AppRole, AppSession, AppUser };

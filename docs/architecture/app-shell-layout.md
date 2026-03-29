@@ -141,6 +141,18 @@ Reason:
 - we need consistency more than novelty
 - outsourcing glass effects will make the shell drift from the public entry
 
+## Current State
+
+The shell skeleton now exists in `src/features/shell`:
+
+- shared app shell
+- responsive sidebar and tablet rail behavior
+- mobile bottom pill navigation
+- route-aware context FAB
+- shell navigation metadata separated from route files
+
+The next layer is not more shell chrome. The next layer is moving route surfaces onto the same interaction language.
+
 ## Implementation Sequence
 
 1. build the shell skeleton
@@ -152,10 +164,10 @@ Reason:
 
 ## Acceptance Checklist
 
-- one app shell wraps all protected routes
-- mobile uses bottom pill navigation
-- tablet uses a collapsible rail
-- desktop uses a sidebar
-- FAB changes by route context
+- [x] one app shell wraps all protected routes
+- [x] mobile uses bottom pill navigation
+- [x] tablet uses a collapsible rail
+- [x] desktop uses a sidebar
+- [x] FAB changes by route context
 - helper flows use one shared responsive sheet primitive
 - protected routes feel like one product, not a set of separate demos

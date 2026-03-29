@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import { jsonb, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import type { AppPermission } from "@/lib/auth/claims";
 
 export const organizationStatusEnum = pgEnum("organization_status", [
   "active",
@@ -32,9 +33,9 @@ export const roles = pgTable(
     name: text("name").notNull(),
     key: text("key").notNull(),
     permissions: jsonb("permissions")
-      .$type<Record<string, unknown>>()
+      .$type<AppPermission[]>()
       .notNull()
-      .default(sql`'{}'::jsonb`),
+      .default(sql`'[]'::jsonb`),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

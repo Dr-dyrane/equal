@@ -90,7 +90,7 @@ export default function OnboardingPage() {
       <section className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
         <article className="glass-panel p-6">
           <div className="flex items-center gap-3">
-            <Building2 className="h-5 w-5 text-primary" />
+            <Building2 className="h-5 w-5 text-accent" />
             <div>
               <span className="metric-chip">Startup sequence</span>
               <h3 className="mt-3 font-heading text-3xl text-slate-950">

@@ -31,13 +31,13 @@ export function LandingHero({ content, signals }: LandingHeroProps) {
       </div>
 
       <Image
-        src="/brand/hero.png"
+        src="/brand/logo.png"
         alt="Equal brand mark"
         width={393}
         height={393}
         priority
         sizes="(max-width: 640px) 12rem, (max-width: 1024px) 15rem, 18rem"
-        className="h-auto w-[11.5rem] sm:w-[13.5rem] lg:w-[16rem] xl:w-[18rem]"
+        className="story-logo-well h-auto w-[11.5rem] sm:w-[13.5rem] lg:w-[16rem] xl:w-[18rem] rotate-275 hover:rotate-360 transition-transform ease-in-out duration-300 my-20"
       />
 
       <div className="grid w-full max-w-[24rem] grid-cols-2 gap-3 sm:w-auto sm:max-w-none sm:auto-cols-max sm:grid-flow-col sm:justify-center">

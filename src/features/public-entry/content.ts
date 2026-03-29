@@ -368,7 +368,6 @@ const authContentByMode: Record<AuthMode, AuthContent> = {
     emailPlaceholder: "alex@equal.app",
     nextTitle: "What opens next",
     nextSteps: ["Resume changes", "Review fairness", "Publish updates"],
-    destination: "/workspace",
   },
   start: {
     modeLabel: "Start",
@@ -380,7 +379,6 @@ const authContentByMode: Record<AuthMode, AuthContent> = {
     showNameField: true,
     nextTitle: "What opens first",
     nextSteps: ["Add your team", "Set your rules", "Build the first week"],
-    destination: "/onboarding",
   },
 };
 

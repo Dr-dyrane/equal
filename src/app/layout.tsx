@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import localFont from "next/font/local";
 import { Geist_Mono, Space_Grotesk } from "next/font/google";
-import { AppShell } from "@/components/app-shell";
-import { AppProviders } from "@/providers/app-providers";
 import "./globals.css";
 
 const bodyFont = localFont({
@@ -60,10 +58,8 @@ export default function RootLayout({
       className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <AppProviders>
-          <AppShell>{children}</AppShell>
-          <Analytics />
-        </AppProviders>
+        {children}
+        <Analytics />
       </body>
     </html>
   );

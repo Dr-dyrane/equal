@@ -30,10 +30,17 @@ function buildPathActions(pathname: string) {
   if (pathname.startsWith("/schedule")) {
     return [
       {
-        id: "schedule-open-analytics",
-        label: "Open fairness analytics",
-        description: "Jump from the roster board into fairness and compliance reporting.",
+        id: "schedule-review-fairness",
+        label: "Review fairness",
+        description: "Open analytics and inspect what the current week is doing to people.",
         href: "/analytics",
+        tone: "primary",
+      },
+      {
+        id: "schedule-open-team",
+        label: "Check team inputs",
+        description: "Move to availability, skills, and preferences before changing the week.",
+        href: "/team",
       },
     ] satisfies GlobalAction[];
   }
@@ -42,9 +49,16 @@ function buildPathActions(pathname: string) {
     return [
       {
         id: "analytics-open-schedule",
-        label: "Inspect live schedule",
-        description: "Switch back to the current roster proposal and conflict board.",
+        label: "Return to schedule",
+        description: "Go back to the live week and keep working from the board.",
         href: "/schedule",
+        tone: "primary",
+      },
+      {
+        id: "analytics-open-settings",
+        label: "Review rules",
+        description: "Open settings and inspect the rule set behind the current score.",
+        href: "/settings",
       },
     ] satisfies GlobalAction[];
   }
@@ -53,9 +67,16 @@ function buildPathActions(pathname: string) {
     return [
       {
         id: "settings-open-onboarding",
-        label: "Open startup routine",
-        description: "Review the organization-first setup sequence from settings.",
+        label: "Continue setup",
+        description: "Move into the organization setup flow and keep the foundation moving.",
         href: "/onboarding",
+        tone: "primary",
+      },
+      {
+        id: "settings-open-schedule",
+        label: "Return to schedule",
+        description: "Go back to the live week once the rule context is clear.",
+        href: "/schedule",
       },
     ] satisfies GlobalAction[];
   }
@@ -63,9 +84,16 @@ function buildPathActions(pathname: string) {
   if (pathname.startsWith("/team")) {
     return [
       {
+        id: "team-open-shifts",
+        label: "Review shifts",
+        description: "Open shift templates and coverage structure before finalizing people inputs.",
+        href: "/shifts",
+        tone: "primary",
+      },
+      {
         id: "team-open-schedule",
-        label: "Open schedule workspace",
-        description: "Move from staffing inputs into roster review.",
+        label: "Open schedule",
+        description: "Move from people inputs into the week itself.",
         href: "/schedule",
       },
     ] satisfies GlobalAction[];
@@ -74,9 +102,16 @@ function buildPathActions(pathname: string) {
   if (pathname.startsWith("/shifts")) {
     return [
       {
+        id: "shifts-open-schedule",
+        label: "Open schedule",
+        description: "See how current templates shape the live week.",
+        href: "/schedule",
+        tone: "primary",
+      },
+      {
         id: "shifts-open-settings",
-        label: "Review rule settings",
-        description: "Open organization rules and integrations before changing templates.",
+        label: "Review rules",
+        description: "Open settings before changing template logic or coverage expectations.",
         href: "/settings",
       },
     ] satisfies GlobalAction[];
@@ -86,29 +121,39 @@ function buildPathActions(pathname: string) {
     return [
       {
         id: "workspace-open-onboarding",
-        label: "Open startup routine",
-        description: "Review the documented first-run path for a new organization.",
+        label: "Continue setup",
+        description: "Move through the documented first-run path for a new organization.",
         href: "/onboarding",
         tone: "primary",
       },
       {
         id: "workspace-open-schedule",
-        label: "Open schedule workspace",
-        description: "Move into roster review and publishing.",
+        label: "Open schedule",
+        description: "Move into the live week and start shaping coverage.",
         href: "/schedule",
       },
     ] satisfies GlobalAction[];
   }
 
-  return [
-    {
-      id: "public-start-auth",
-      label: "Start with Equal",
-      description: "Move from the public entry into authentication and product setup.",
-      href: "/auth",
-      tone: "primary",
-    },
-  ] satisfies GlobalAction[];
+  if (pathname.startsWith("/onboarding")) {
+    return [
+      {
+        id: "onboarding-open-settings",
+        label: "Open settings",
+        description: "Define rules, roles, and organization controls as part of setup.",
+        href: "/settings",
+        tone: "primary",
+      },
+      {
+        id: "onboarding-open-workspace",
+        label: "Return to workspace",
+        description: "Go back to the main workspace once setup context is clear.",
+        href: "/workspace",
+      },
+    ] satisfies GlobalAction[];
+  }
+
+  return [] satisfies GlobalAction[];
 }
 
 export function GlobalActionsProvider({

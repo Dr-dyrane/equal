@@ -1,6 +1,6 @@
 # Repo Structure Plan
 
-This document defines the target repo shape for the next implementation phase.
+This document defines the repo shape for the current implementation phase.
 
 The goal is to keep Equal readable as it grows:
 
@@ -188,14 +188,14 @@ Use for:
 - provider-per-entity architecture
 - one more wrapper folder every time the structure gets confusing
 
-## Immediate Repo Changes To Make
+## Current Platform Changes
 
-1. add route groups for `(public)` and `(app)`
-2. add `src/db`
-3. add `src/server`
-4. add `src/lib/contracts`
-5. add `src/features/shell`
-6. move current protected routes under `(app)`
+- [x] route groups for `(public)` and `(app)` exist
+- [x] `src/db` exists
+- [x] `src/server` exists
+- [x] `src/lib/contracts` exists
+- [x] `src/features/shell` exists
+- [x] protected routes live under `(app)`
 
 ## Success Criteria
 

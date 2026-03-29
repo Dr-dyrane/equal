@@ -1,3 +1,5 @@
+import type { AuthMode } from "@/lib/contracts/auth";
+
 export type ShiftPreview = {
   time: string;
   person: string;
@@ -82,8 +84,6 @@ export type DemoFeatureExperience = {
 
 export type DemoScenarioKey = "baseline" | "balanced";
 
-export type AuthMode = "start" | "signin";
-
 export type AuthContent = {
   modeLabel: string;
   title: string;
@@ -94,5 +94,6 @@ export type AuthContent = {
   showNameField?: boolean;
   nextTitle: string;
   nextSteps: readonly string[];
-  destination: string;
 };
+
+export type { AuthMode };

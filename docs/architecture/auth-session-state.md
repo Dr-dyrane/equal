@@ -1,15 +1,16 @@
 # Auth, Session, and State Architecture
 
-This document defines the first real platform milestone after the public entry experience.
+This document defines the current platform spine behind the public entry experience.
 
-The public landing and demo now do the introduction work. The next job is to make entry into the real app trustworthy, simple, and technically solid.
+The landing page and demo introduce the product. Auth, session, and route ownership make the real app trustworthy once the user enters it.
 
 ## Goals
 
 - email-first entry
 - server-owned session
 - organization-aware permissions
-- thin route files
+- static public routes
+- protected app routes
 - one consistent state model across client and server
 
 ## Product Rule
@@ -30,13 +31,13 @@ The user should not feel:
 
 - primary auth method: email magic link
 - email delivery: Postmark
-- session signing/verification: `jose`
+- session signing and verification: `jose`
 - session storage: secure HttpOnly cookie
-- app context: session claims + server bootstrap queries
+- app context: session claims plus server bootstrap queries
 
 ## Why This Route
 
-It matches Equal’s product direction:
+It matches Equal's product direction:
 
 - low-friction
 - no password ceremony
@@ -57,16 +58,16 @@ Not:
 
 ### Client role
 
-The client should only hydrate a session snapshot and expose it to the UI.
+The client hydrates a session snapshot and exposes it to the UI.
 
 That means:
 
 - `AuthProvider` remains useful
-- but it becomes a consumer of a real session, not the session authority
+- but it consumes a real session, not a fabricated one
 
 ## Claims
 
-The session should carry at minimum:
+The session carries at minimum:
 
 - `user_id`
 - `organisation_id`
@@ -75,48 +76,64 @@ The session should carry at minimum:
 - `active_team_id` optional
 - `active_site_id` optional
 
-## Route Plan
+## Route Ownership
 
-### Public auth routes
+### `(public)`
 
+Owns:
+
+- `/`
+- `/demo`
 - `/auth`
-  - choose `start` or `signin`
-  - capture email
-  - optionally capture display name during self-serve start
-
 - `/auth/verify`
-  - consume magic link token
-  - create session cookie
-  - redirect to target route
 
-- `/auth/invite/[token]`
-  - later: invitation acceptance
+Rules:
 
-### Protected routes
+- static-first
+- no protected app shell
+- no workspace navigation chrome
+- theme and public presentation only
 
-Everything in `(app)` requires a valid session.
+### `(app)`
 
-### Middleware
+Owns:
 
-Use middleware to:
+- `/workspace`
+- `/onboarding`
+- `/schedule`
+- `/team`
+- `/shifts`
+- `/analytics`
+- `/settings`
 
-- allow `(public)` and static assets
-- protect `(app)`
-- redirect anonymous users to `/auth`
-- redirect authenticated users away from redundant auth states when appropriate
+Rules:
 
-## Current Scaffold To Replace
+- protected by session
+- bootstrapped with server session data
+- rendered inside the shared app shell
 
-The current mock session helper in `src/features/public-entry/lib/public-session.ts` is acceptable only as a temporary demo scaffold.
+## Middleware
 
-The target replacement is:
+Middleware is responsible for:
 
-- API or server action starts auth flow
-- Postmark sends magic link
-- verify route creates signed cookie
-- `AuthProvider` reads server session bootstrap
+- allowing public routes and static assets through
+- redirecting anonymous users away from protected routes
+- preserving the requested path in `next`
+- redirecting authenticated users away from redundant auth states when appropriate
 
-## File Plan
+## Current Implementation
+
+The current flow is:
+
+1. `/auth` submits the user's work email to `/api/auth/start`
+2. Postmark sends a magic link
+3. `/auth/verify` consumes the signed token and creates the session cookie
+4. `(app)` layout reads the session on the server
+5. `AuthProvider` hydrates that session snapshot for client UI
+
+The landing page and demo stay static again because the session read now happens in `(app)` layout, not in the root layout. `/auth` remains request-aware, which is acceptable for the entry flow.
+
+## File Map
 
 ```txt
 src/lib/auth/
@@ -127,6 +144,9 @@ src/lib/auth/
   guards.ts
   errors.ts
 
+src/lib/contracts/
+  auth.ts
+
 src/server/repositories/
   auth-repo.ts
   org-repo.ts
@@ -135,11 +155,18 @@ src/server/services/auth/
   start-auth.ts
   verify-auth.ts
   signout.ts
+  get-auth-session.ts
 
 src/app/api/auth/
   start/route.ts
-  verify/route.ts
   signout/route.ts
+
+src/app/(public)/auth/
+  page.tsx
+  verify/route.ts
+
+src/app/(app)/
+  layout.tsx
 
 middleware.ts
 ```
@@ -149,12 +176,12 @@ middleware.ts
 ### Use providers for
 
 - authenticated user snapshot
-- active org/team/site
-- route-scoped complex interaction state
+- active org, team, and site context
+- route-scoped complex interactive state
 
 ### Use React Query for
 
-- bootstrap user/org data
+- bootstrap user and org data
 - permissions snapshot
 - team lists
 - schedules
@@ -165,7 +192,7 @@ middleware.ts
 
 - auth input
 - onboarding
-- team/profile editing
+- team and profile editing
 - rule setup
 
 No ad hoc `useState` forms for real workflows.
@@ -177,7 +204,7 @@ Use:
 
 ## Auth UX Rules
 
-- make the mechanism explicit: “continue with email”
+- make the mechanism explicit: "Continue with email"
 - keep one dominant action
 - avoid duplicate controls
 - do not clutter the header
@@ -186,11 +213,12 @@ Use:
 
 ## Acceptance Checklist
 
-- auth email start works
-- verify flow creates secure cookie
-- session survives refresh
-- protected routes redirect correctly
-- authenticated user can reach `(app)`
-- anonymous user cannot reach `(app)`
-- `AuthProvider` hydrates real session data
-- current public auth UI still feels simple after backend wiring
+- [x] auth email start works
+- [x] verify flow creates secure cookie
+- [x] session survives refresh
+- [x] protected routes redirect correctly
+- [x] authenticated user can reach `(app)`
+- [x] anonymous user cannot reach `(app)`
+- [x] `AuthProvider` hydrates real session data
+- [x] landing and demo are no longer forced dynamic by auth bootstrap
+- [x] current public auth UI still feels simple after backend wiring

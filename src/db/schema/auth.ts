@@ -8,6 +8,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
+import type { AppPermission } from "@/lib/auth/claims";
 import { organizations, roles } from "@/db/schema/organisations";
 
 export const userStatusEnum = pgEnum("user_status", ["active", "disabled"]);
@@ -54,9 +55,9 @@ export const memberships = pgTable(
     title: text("title"),
     status: membershipStatusEnum("status").notNull().default("active"),
     permissionsOverride: jsonb("permissions_override")
-      .$type<Record<string, unknown>>()
+      .$type<AppPermission[]>()
       .notNull()
-      .default(sql`'{}'::jsonb`),
+      .default(sql`'[]'::jsonb`),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },

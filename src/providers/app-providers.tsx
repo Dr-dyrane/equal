@@ -1,6 +1,7 @@
 "use client";
 
 import { Toaster } from "sonner";
+import type { AppSession } from "@/lib/auth/claims";
 import { AuthProvider } from "@/providers/auth-provider";
 import { AppErrorBoundary } from "@/providers/app-error-boundary";
 import { GlobalActionsProvider } from "@/providers/global-actions-provider";
@@ -10,12 +11,18 @@ import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { UIProvider } from "@/providers/ui-provider";
 
-export function AppProviders({ children }: { children: React.ReactNode }) {
+export function AppProviders({
+  children,
+  initialSession = null,
+}: {
+  children: React.ReactNode;
+  initialSession?: AppSession | null;
+}) {
   return (
     <AppErrorBoundary>
       <ThemeProvider>
         <QueryProvider>
-          <AuthProvider>
+          <AuthProvider initialSession={initialSession}>
             <OrgProvider>
               <UIProvider>
                 <LayoutProvider>

@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { type AppRole, useAuth } from "@/providers/auth-provider";
+import { type AppPermission, type AppRole, PERMISSIONS_BY_ROLE } from "@/lib/auth/claims";
+import { useAuth } from "@/providers/auth-provider";
 import { usePersistentState } from "@/providers/use-persistent-state";
 
 type Organization = {
@@ -15,26 +16,16 @@ type WorkspaceTarget = {
   name: string;
 };
 
-type Permission =
-  | "schedule.generate"
-  | "schedule.publish"
-  | "schedule.swap.review"
-  | "team.manage"
-  | "rules.manage"
-  | "analytics.view"
-  | "settings.manage"
-  | "billing.manage";
-
 type OrgContextValue = {
   organization: Organization;
   activeSite: WorkspaceTarget;
   activeTeam: WorkspaceTarget;
   role: AppRole;
-  permissions: Permission[];
+  permissions: AppPermission[];
   isDemoContext: boolean;
   setActiveSite: (siteId: string) => void;
   setActiveTeam: (teamId: string) => void;
-  can: (permission: Permission) => boolean;
+  can: (permission: AppPermission) => boolean;
 };
 
 const DEFAULT_ORGANIZATION: Organization = {
@@ -53,40 +44,10 @@ const TEAMS: WorkspaceTarget[] = [
   { id: "field-coverage", name: "Field Coverage" },
 ];
 
-const PERMISSIONS_BY_ROLE: Record<AppRole, Permission[]> = {
-  owner: [
-    "schedule.generate",
-    "schedule.publish",
-    "schedule.swap.review",
-    "team.manage",
-    "rules.manage",
-    "analytics.view",
-    "settings.manage",
-    "billing.manage",
-  ],
-  admin: [
-    "schedule.generate",
-    "schedule.publish",
-    "schedule.swap.review",
-    "team.manage",
-    "rules.manage",
-    "analytics.view",
-    "settings.manage",
-  ],
-  scheduler: [
-    "schedule.generate",
-    "schedule.publish",
-    "schedule.swap.review",
-    "analytics.view",
-  ],
-  staff: ["analytics.view"],
-  observer: ["analytics.view"],
-};
-
 const OrgContext = createContext<OrgContextValue | null>(null);
 
 export function OrgProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { session, user } = useAuth();
   const [activeSiteId, setActiveSiteId] = usePersistentState(
     "equal.org.active-site",
     SITES[0].id,
@@ -97,7 +58,7 @@ export function OrgProvider({ children }: { children: React.ReactNode }) {
   );
 
   const role = user?.role ?? "scheduler";
-  const permissions = PERMISSIONS_BY_ROLE[role];
+  const permissions = session?.permissions ?? PERMISSIONS_BY_ROLE[role];
   const activeSite =
     SITES.find((site) => site.id === activeSiteId) ?? SITES[0];
   const activeTeam =
@@ -106,7 +67,7 @@ export function OrgProvider({ children }: { children: React.ReactNode }) {
   return (
     <OrgContext.Provider
       value={{
-        organization: DEFAULT_ORGANIZATION,
+        organization: session?.organization ?? DEFAULT_ORGANIZATION,
         activeSite,
         activeTeam,
         role,

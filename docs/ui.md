@@ -66,7 +66,8 @@ These route roles should stay explicit.
 ### Product preview / internal overview
 
 - `/workspace`
-- Purpose: overview of modules, startup routine, launch progress, and current product surfaces
+- Purpose: decision-focused home surface for the live week, attention items, fairness state, and fast handoff into core modules
+- This should not become a brochure for the app once the user is inside
 
 ### Demo entry
 
