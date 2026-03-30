@@ -1,106 +1,121 @@
-export type TeamMetric = {
-  label: string;
-  value: string;
-  detail: string;
-};
+export type BaselineTeamInputState =
+  | "ready"
+  | "needs-availability"
+  | "needs-preferences"
+  | "needs-check";
 
-export type TeamMember = {
+export type BaselineTeamProfile = {
   name: string;
   role: string;
-  site: string;
-  state: string;
+  siteSlug: string;
   detail: string;
+  inputState: BaselineTeamInputState;
   skills: string[];
+  maxHoursPerWeek: number;
 };
 
-export type TeamSignal = {
-  title: string;
-  detail: string;
-  tone: "primary" | "secondary" | "warning";
-};
+export const BASELINE_TEAM = {
+  name: "Core Scheduling",
+  slug: "core-scheduling",
+  colorToken: "indigo",
+} as const;
 
-export const teamMetrics: TeamMetric[] = [
+export const BASELINE_SITES = [
   {
-    label: "Active staff",
-    value: "128",
-    detail: "People are visible by team, site, and role without duplication.",
+    name: "Central Ops",
+    slug: "central-ops",
   },
   {
-    label: "Availability ready",
-    value: "92%",
-    detail: "Most of next week’s signals are already captured before scheduling starts.",
+    name: "Field Coverage",
+    slug: "field-coverage",
   },
-  {
-    label: "Cross-skill cover",
-    value: "34%",
-    detail: "Cross-trained people still keep the week resilient when demand shifts.",
-  },
-];
+] as const;
 
-export const teamMembers: TeamMember[] = [
+export const BASELINE_SKILLS = [
+  "Inbound",
+  "Forklift",
+  "Night cover",
+  "Packing",
+  "Dispatch",
+  "Escalations",
+  "Mentor",
+  "Clinical",
+  "Float pool",
+  "Service",
+  "Customer care",
+] as const;
+
+export const BASELINE_TEAM_PROFILES: readonly BaselineTeamProfile[] = [
   {
     name: "Mia Cruz",
     role: "Inbound lead",
-    site: "Central Ops",
-    state: "Ready",
-    detail: "Availability is in, nights are balanced, and skill coverage is current.",
+    siteSlug: "central-ops",
+    detail: "Night coverage stays stable if Tuesday closes cleanly.",
+    inputState: "ready",
     skills: ["Inbound", "Forklift", "Night cover"],
+    maxHoursPerWeek: 40,
   },
   {
     name: "Lena Park",
     role: "Packing",
-    site: "Central Ops",
-    state: "Needs preference update",
-    detail: "Shift preferences are stale for next week even though leave windows are current.",
-    skills: ["Packing", "Dispatch assist", "Weekend cover"],
+    siteSlug: "central-ops",
+    detail: "Shift preferences need one more pass before the week goes out.",
+    inputState: "needs-preferences",
+    skills: ["Packing", "Dispatch", "Customer care"],
+    maxHoursPerWeek: 36,
   },
   {
     name: "Kai Morgan",
     role: "Support pod",
-    site: "Field Coverage",
-    state: "Ready",
-    detail: "Cross-skill pairing keeps the late week stable if Tuesday rotates cleanly.",
-    skills: ["Support", "Escalations", "Mentor"],
+    siteSlug: "field-coverage",
+    detail: "Cross-skill coverage is current and ready to absorb late change.",
+    inputState: "ready",
+    skills: ["Service", "Escalations", "Mentor"],
+    maxHoursPerWeek: 40,
   },
   {
     name: "Owen Diaz",
     role: "Dispatch",
-    site: "Field Coverage",
-    state: "Missing certification refresh",
-    detail: "Coverage is usable, but one capability expires before the next cycle closes.",
+    siteSlug: "field-coverage",
+    detail: "One skill check is due before the next publish.",
+    inputState: "needs-check",
     skills: ["Dispatch", "Forklift", "Escalations"],
-  },
-];
-
-export const teamSignals: TeamSignal[] = [
-  {
-    title: "4 teammates still need availability",
-    detail: "Next week looks usable, but a few missing inputs will turn into manual exceptions if they stay open.",
-    tone: "warning",
+    maxHoursPerWeek: 40,
   },
   {
-    title: "Night pairing is thin",
-    detail: "Only two people can safely absorb a Tuesday escalation without shifting fairness too far.",
-    tone: "secondary",
+    name: "Noah Kent",
+    role: "Night ops",
+    siteSlug: "central-ops",
+    detail: "Availability is current and nights stay in range.",
+    inputState: "ready",
+    skills: ["Night cover", "Escalations"],
+    maxHoursPerWeek: 38,
   },
   {
-    title: "Core skills are mostly healthy",
-    detail: "The week can still run, but expiring capability needs a quick check before the next publish.",
-    tone: "primary",
-  },
-];
-
-export const teamCapabilityLanes = [
-  {
-    title: "Coverage confidence",
-    detail: "Inbound, dispatch, and clinical roles all have at least one backup pairing available.",
+    name: "Ava Brooks",
+    role: "Night ops",
+    siteSlug: "central-ops",
+    detail: "Rest windows are protected for the next cycle.",
+    inputState: "ready",
+    skills: ["Night cover", "Service"],
+    maxHoursPerWeek: 38,
   },
   {
-    title: "Preference capture",
-    detail: "Availability is strong enough to trust the next draft, but preferences need a final sweep.",
+    name: "Ivy Chen",
+    role: "Clinical",
+    siteSlug: "central-ops",
+    detail: "Availability still needs to land before the next draft.",
+    inputState: "needs-availability",
+    skills: ["Clinical", "Float pool"],
+    maxHoursPerWeek: 32,
   },
   {
-    title: "Skill health",
-    detail: "Critical coverage holds as long as expiring certifications are renewed this week.",
+    name: "June Hall",
+    role: "Float pool",
+    siteSlug: "central-ops",
+    detail: "Coverage is flexible and seniority stays balanced.",
+    inputState: "ready",
+    skills: ["Float pool", "Mentor", "Customer care"],
+    maxHoursPerWeek: 40,
   },
 ] as const;

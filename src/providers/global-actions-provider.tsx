@@ -102,17 +102,16 @@ function buildPathActions(pathname: string) {
   if (pathname.startsWith("/shifts")) {
     return [
       {
-        id: "shifts-open-schedule",
-        label: "Open schedule",
-        description: "See how current templates shape the live week.",
+        id: "shifts-open-week",
+        label: "Open week",
+        description: "See how current shapes land in the live week.",
         href: "/schedule",
-        tone: "primary",
       },
       {
-        id: "shifts-open-settings",
-        label: "Review rules",
-        description: "Open settings before changing template logic or coverage expectations.",
-        href: "/settings",
+        id: "shifts-open-team",
+        label: "Open team",
+        description: "Check people inputs before changing a shape.",
+        href: "/team",
       },
     ] satisfies GlobalAction[];
   }

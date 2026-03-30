@@ -1,6 +1,8 @@
 import type { AppRole } from "@/lib/auth/claims";
 import type { ScheduleDay } from "@/features/roster-builder/content";
 import type { RosterStage } from "@/features/roster-builder/types";
+import type { TeamSnapshot, TeamTaskTone } from "@/features/team/types";
+import type { ShiftSnapshot, ShiftTaskTone } from "@/features/shifts/types";
 import { startupRoutine } from "@/lib/startup-routine";
 
 export type DashboardMetric = {
@@ -48,11 +50,28 @@ export type FairnessLine = {
   tone: string;
 };
 
-export function getDashboardMetrics(stage: RosterStage): DashboardMetric[] {
+function getAttentionTone(
+  tone: TeamTaskTone | ShiftTaskTone,
+): AttentionItem["tone"] {
+  if (tone === "warning") {
+    return "warning";
+  }
+
+  if (tone === "secondary") {
+    return "secondary";
+  }
+
+  return "primary";
+}
+
+export function getDashboardMetrics(input: {
+  stage: RosterStage;
+  teamSnapshot: TeamSnapshot;
+  shiftSnapshot: ShiftSnapshot;
+}): DashboardMetric[] {
+  const { stage, teamSnapshot, shiftSnapshot } = input;
   const readinessValue =
     stage === "published" ? "Out" : stage === "ready" ? "Ready" : "1 left";
-  const fairnessValue =
-    stage === "draft" ? "90.4" : stage === "reviewing" ? "93.8" : "95.1";
   const readinessDetail =
     stage === "published"
       ? "Roster is sent."
@@ -62,19 +81,21 @@ export function getDashboardMetrics(stage: RosterStage): DashboardMetric[] {
 
   return [
     {
-      label: "Fairness",
-      value: fairnessValue,
-      detail: stage === "published" ? "Week stayed even." : "Night load stays in range.",
-    },
-    {
-      label: "Coverage",
-      value: "99.4%",
-      detail: "Critical roles covered.",
-    },
-    {
-      label: "Ready",
+      label: "Week",
       value: readinessValue,
       detail: readinessDetail,
+    },
+    {
+      label: "Team",
+      value: teamSnapshot.metrics[1]?.value ?? "0%",
+      detail: teamSnapshot.tasks[0]?.detail ?? teamSnapshot.summary,
+    },
+    {
+      label: "Shapes",
+      value: shiftSnapshot.metrics[0]?.value ?? "0",
+      detail:
+        shiftSnapshot.tasks[0]?.detail ??
+        `${shiftSnapshot.templates.length} reusable shapes are live.`,
     },
   ];
 }
@@ -96,12 +117,16 @@ export function getAttentionItems(input: {
   role: AppRole;
   stage: RosterStage;
   unresolvedConflictCount: number;
+  teamSnapshot: TeamSnapshot;
+  shiftSnapshot: ShiftSnapshot;
 }): AttentionItem[] {
+  const teamTask = input.teamSnapshot.tasks[0];
+  const shiftTask = input.shiftSnapshot.tasks[0];
   const base: AttentionItem[] = [
     input.unresolvedConflictCount > 0
       ? {
-          title: "Fairness drift",
-          detail: "Tuesday night still leans hard.",
+          title: "Close Tuesday night",
+          detail: "One call still decides the week.",
           href: "/schedule",
           tone: "warning",
         }
@@ -114,18 +139,26 @@ export function getAttentionItems(input: {
           href: "/schedule",
           tone: "primary",
         },
-    {
-      title: "Preference gaps",
-      detail: "Availability still needs updates.",
-      href: "/team",
-      tone: "secondary",
-    },
-    {
-      title: "Rules review",
-      detail: "Recovery windows need a pass.",
-      href: "/settings",
-      tone: "primary",
-    },
+    ...(teamTask
+      ? [
+          {
+            title: teamTask.title,
+            detail: teamTask.detail,
+            href: "/team",
+            tone: getAttentionTone(teamTask.tone),
+          },
+        ]
+      : []),
+    ...(shiftTask
+      ? [
+          {
+            title: shiftTask.title,
+            detail: shiftTask.detail,
+            href: "/shifts",
+            tone: getAttentionTone(shiftTask.tone),
+          },
+        ]
+      : []),
   ];
 
   if (input.role === "staff" || input.role === "observer") {

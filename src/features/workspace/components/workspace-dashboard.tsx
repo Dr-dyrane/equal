@@ -5,6 +5,8 @@ import { SfSymbol } from "@/components/sf-symbol";
 import { useAuth } from "@/providers/auth-provider";
 import { useOrg } from "@/providers/org-provider";
 import type { ScheduleSnapshot } from "@/features/roster-builder/types";
+import type { TeamSnapshot } from "@/features/team/types";
+import type { ShiftSnapshot } from "@/features/shifts/types";
 import {
   getAttentionItems,
   getDashboardDays,
@@ -22,17 +24,27 @@ function getFirstName(name: string | undefined) {
 
 export function WorkspaceDashboard({
   snapshot,
+  teamSnapshot,
+  shiftSnapshot,
 }: {
   snapshot: ScheduleSnapshot;
+  teamSnapshot: TeamSnapshot;
+  shiftSnapshot: ShiftSnapshot;
 }) {
   const { user } = useAuth();
   const { role, activeSite, activeTeam } = useOrg();
-  const metrics = getDashboardMetrics(snapshot.stage);
+  const metrics = getDashboardMetrics({
+    stage: snapshot.stage,
+    teamSnapshot,
+    shiftSnapshot,
+  });
   const days = getDashboardDays(snapshot.days);
   const attention = getAttentionItems({
     role,
     stage: snapshot.stage,
     unresolvedConflictCount: snapshot.unresolvedConflictCount,
+    teamSnapshot,
+    shiftSnapshot,
   });
   const fairness = getFairnessLines(snapshot.decisionPerson);
   const nextSteps = getRoleSteps(role);

@@ -1,165 +1,248 @@
+"use client";
+
 import Link from "next/link";
-import {
-  shiftMetrics,
-  shiftReadinessLanes,
-  shiftSignals,
-  shiftTemplates,
-  type ShiftSignal,
-} from "@/features/shifts/content";
+import { useEffect, useMemo, useState } from "react";
 import { SfSymbol } from "@/components/sf-symbol";
+import { ShiftSupportSheet } from "@/features/shifts/components/shift-support-sheet";
+import { ShiftTemplateSheet } from "@/features/shifts/components/shift-template-sheet";
+import type { ShiftSnapshot, ShiftTemplateCard } from "@/features/shifts/types";
+import { useGlobalActions } from "@/providers/global-actions-provider";
 
-function getSignalTone(tone: ShiftSignal["tone"]) {
-  if (tone === "warning") {
-    return "bg-[color:var(--warning)]";
-  }
+export function ShiftsWorkspace({ snapshot: initialSnapshot }: { snapshot: ShiftSnapshot }) {
+  const { registerActions, unregisterActions } = useGlobalActions();
+  const [snapshot, setSnapshot] = useState(initialSnapshot);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
+    initialSnapshot.templates[0]?.id ?? null,
+  );
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
 
-  if (tone === "secondary") {
-    return "bg-[color:var(--secondary)]";
-  }
+  const selectedTemplate = useMemo<ShiftTemplateCard | null>(
+    () =>
+      snapshot.templates.find((template) => template.id === selectedTemplateId) ??
+      snapshot.templates[0] ??
+      null,
+    [selectedTemplateId, snapshot.templates],
+  );
 
-  return "bg-[color:var(--primary)]";
-}
+  useEffect(() => {
+    if (!selectedTemplate) {
+      unregisterActions("shifts-editor");
+      return;
+    }
 
-export function ShiftsWorkspace() {
+    registerActions("shifts-editor", [
+      {
+        id: "shifts-edit-shape",
+        label: "Edit shape",
+        description: `Adjust ${selectedTemplate.name.toLowerCase()}.`,
+        tone: "primary",
+        run: () => {
+          setSheetOpen(true);
+        },
+      },
+      {
+        id: "shifts-open-details",
+        label: "Details",
+        description: "Open the week watch.",
+        run: () => {
+          setSupportOpen(true);
+        },
+      },
+    ]);
+
+    return () => unregisterActions("shifts-editor");
+  }, [registerActions, selectedTemplate, unregisterActions]);
+
   return (
-    <div className="flex flex-col gap-4">
-      <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.75fr)]">
-        <div className="grid items-start gap-4">
-          <section className="story-panel px-5 py-5 sm:px-6">
-            <span className="story-system-label story-system-label-accent">
-              Shift templates
-            </span>
-            <h1 className="mt-4 text-balance font-heading text-[2.55rem] leading-[0.94] text-[color:var(--story-ink)] sm:text-[3.25rem]">
-              Model the week once.
-            </h1>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-[color:var(--story-muted)]">
-              Times, demand, and required skills should be clear before the schedule
-              starts assigning people. Clean templates keep the week reusable and legible.
-            </p>
+    <>
+      <div className="flex flex-col gap-4">
+        <section className="story-panel px-5 py-5 sm:px-6">
+          <div className="flex items-start justify-between gap-3">
+            <span className="story-system-label story-system-label-accent">Shifts</span>
+            <button
+              type="button"
+              onClick={() => setSupportOpen(true)}
+              className="story-nav-secondary inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-[color:var(--story-ink)]"
+            >
+              Details
+            </button>
+          </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/schedule"
+          <h1 className="mt-4 text-balance font-heading text-[2.55rem] leading-[0.94] text-[color:var(--story-ink)] sm:text-[3.25rem]">
+            Keep demand clear.
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--story-muted)]">
+            {snapshot.summary}
+          </p>
+
+          {selectedTemplate ? (
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => setSheetOpen(true)}
                 className="story-primary-cta inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-primary-text)]"
               >
-                Open week
+                Edit shape
                 <SfSymbol name="arrow-right" className="h-[0.95rem] w-[0.95rem]" />
-              </Link>
+              </button>
               <Link
-                href="/team"
+                href="/schedule"
                 className="story-nav-secondary inline-flex items-center justify-center gap-2 px-5 py-3 text-sm font-semibold text-[color:var(--story-ink)]"
               >
-                Check skills
+                Open week
               </Link>
             </div>
-          </section>
+          ) : null}
+        </section>
 
-          <section className="grid gap-3 md:grid-cols-3">
-            {shiftMetrics.map((metric) => (
-              <article key={metric.label} className="story-soft-card px-4 py-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-                  {metric.label}
-                </p>
-                <p className="mt-4 font-heading text-[2.25rem] leading-none text-[color:var(--story-ink)]">
-                  {metric.value}
-                </p>
-                <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
-                  {metric.detail}
-                </p>
-              </article>
-            ))}
-          </section>
-        </div>
+        <section className="grid grid-cols-2 gap-3 md:grid-cols-3">
+          {snapshot.metrics.map((metric, index) => (
+            <article
+              key={metric.label}
+              className={`story-soft-card px-4 py-4 ${
+                index === snapshot.metrics.length - 1 ? "col-span-2 md:col-span-1" : ""
+              }`}
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
+                {metric.label}
+              </p>
+              <p className="mt-4 font-heading text-[2.25rem] leading-none text-[color:var(--story-ink)]">
+                {metric.value}
+              </p>
+              <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
+                {metric.detail}
+              </p>
+            </article>
+          ))}
+        </section>
 
-        <div className="grid gap-4">
-          <section className="story-panel px-5 py-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              What shapes the week
-            </p>
-            <div className="mt-4 space-y-3">
-              {shiftSignals.map((signal) => (
-                <div key={signal.title} className="story-soft-card px-4 py-4">
-                  <div className="flex items-start gap-3">
-                    <span
-                      className={`mt-2 h-2.5 w-2.5 shrink-0 rounded-full ${getSignalTone(signal.tone)}`}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-[color:var(--story-ink)]">
-                        {signal.title}
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                        {signal.detail}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="story-panel px-5 py-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Readiness
-            </p>
-            <div className="mt-4 space-y-3">
-              {shiftReadinessLanes.map((lane) => (
-                <div key={lane.title} className="story-soft-card px-4 py-4">
-                  <p className="text-sm font-semibold text-[color:var(--story-ink)]">
-                    {lane.title}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                    {lane.detail}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section className="story-panel px-5 py-5 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Template library
-            </p>
-            <h2 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
-              Keep demand explicit.
-            </h2>
-          </div>
-          <span className="story-system-label">4 live templates</span>
-        </div>
-
-        <div className="mt-5 grid gap-3 lg:grid-cols-2">
-          {shiftTemplates.map((template) => (
-            <article key={template.name} className="story-soft-card px-4 py-4">
-              <div className="flex items-start justify-between gap-3">
+        {selectedTemplate ? (
+          <section className="grid items-start gap-4">
+            <section className="story-panel px-5 py-5 sm:px-6">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="text-base font-semibold text-[color:var(--story-ink)]">
-                    {template.name}
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
+                    Pick a shape
                   </p>
-                  <p className="mt-2 text-sm text-[color:var(--story-muted)]">
-                    {template.window} · {template.site}
+                  <h2 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
+                    {selectedTemplate.name}
+                  </h2>
+                  <p className="mt-3 text-sm leading-6 text-[color:var(--story-muted)]">
+                    {selectedTemplate.dayLabel} · {selectedTemplate.window} · {selectedTemplate.site}
                   </p>
                 </div>
-                <span className="story-system-label">{template.demand}</span>
+                <span className="story-system-label">{selectedTemplate.headcount}</span>
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-[color:var(--story-muted)]">
-                {template.detail}
+              <div className="mt-5 grid grid-cols-2 gap-2">
+                <div className="story-soft-card px-4 py-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--story-subtle)]">
+                    Day
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--story-ink)]">
+                    {selectedTemplate.dayLabel}
+                  </p>
+                </div>
+                <div className="story-soft-card px-4 py-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--story-subtle)]">
+                    Window
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--story-ink)]">
+                    {selectedTemplate.window}
+                  </p>
+                </div>
+                <div className="story-soft-card px-4 py-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--story-subtle)]">
+                    Site
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--story-ink)]">
+                    {selectedTemplate.site}
+                  </p>
+                </div>
+                <div className="story-soft-card px-4 py-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--story-subtle)]">
+                    Skills
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-[color:var(--story-ink)]">
+                    {selectedTemplate.skills.length}
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-5 text-sm leading-6 text-[color:var(--story-muted)]">
+                {selectedTemplate.detail}
               </p>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {template.skills.map((skill) => (
+                {selectedTemplate.skills.map((skill) => (
                   <span key={skill} className="story-system-label">
                     {skill}
                   </span>
                 ))}
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
-    </div>
+            </section>
+
+            <section className="story-panel px-5 py-5 sm:px-6">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
+                    Shapes
+                  </p>
+                  <h3 className="mt-2 font-heading text-[2rem] leading-none text-[color:var(--story-ink)]">
+                    Choose the next one.
+                  </h3>
+                </div>
+                <span className="story-system-label">{snapshot.templates.length} live</span>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 items-start gap-2 xl:grid-cols-3">
+                {snapshot.templates.map((template) => {
+                  const active = template.id === selectedTemplate.id;
+
+                  return (
+                    <button
+                      key={template.id}
+                      type="button"
+                      onClick={() => setSelectedTemplateId(template.id)}
+                      className={`shift-template-selector ${ active ? 'bg-accent':'bg-surface'}  rounded-2xl p-4 shadow glass`}
+                      data-active={active ? "true" : "false"}
+                      aria-pressed={active}
+                      data-template-id={template.id}
+                    >
+                      <p className="font-heading text-[1.2rem] leading-none text-[color:var(--story-ink)]">
+                        {template.name}
+                      </p>
+                      <p className="mt-2 text-sm text-[color:var(--story-muted)]">
+                        {template.dayLabel}
+                      </p>
+                      <p className="mt-1 text-sm text-[color:var(--story-muted)]">
+                        {template.window}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          </section>
+        ) : null}
+      </div>
+
+      <ShiftSupportSheet
+        open={supportOpen}
+        onOpenChange={setSupportOpen}
+        tasks={snapshot.tasks}
+        metrics={snapshot.metrics}
+      />
+      <ShiftTemplateSheet
+        template={selectedTemplate}
+        skillOptions={snapshot.skillOptions}
+        open={sheetOpen && Boolean(selectedTemplate)}
+        onOpenChange={(open) => setSheetOpen(open)}
+        onSaved={(nextSnapshot) => {
+          setSnapshot(nextSnapshot);
+        }}
+      />
+    </>
   );
 }

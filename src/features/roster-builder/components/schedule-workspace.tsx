@@ -1,20 +1,18 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { SfSymbol } from "@/components/sf-symbol";
 import {
-  getScheduleFocus,
   getScheduleMetrics,
-  getScheduleNotes,
   getScheduleSummary,
-  scheduleActions,
-  scheduleGuardrails,
   type ScheduleMetric,
   type ScheduleShift,
 } from "@/features/roster-builder/content";
+import { ScheduleSupportSheet } from "@/features/roster-builder/components/schedule-support-sheet";
 import { ScheduleShiftSheet } from "@/features/roster-builder/components/schedule-shift-sheet";
-import { useFairness } from "@/features/fairness/provider/fairness-provider";
 import { useRosterBuilder } from "@/features/roster-builder/provider/roster-builder-provider";
+import type { TeamTask } from "@/features/team/types";
+import type { ShiftTask } from "@/features/shifts/types";
 
 function getMetricTone(tone: ScheduleMetric["tone"]) {
   if (tone === "warning") {
@@ -45,9 +43,13 @@ function getShiftStyle(shift: ScheduleShift) {
   } as CSSProperties;
 }
 
-export function ScheduleWorkspace() {
-  const { window, comparisonMode, explanationPanelOpen, toggleExplanationPanel } =
-    useFairness();
+export function ScheduleWorkspace({
+  teamTask,
+  shiftTask,
+}: {
+  teamTask: TeamTask | null;
+  shiftTask: ShiftTask | null;
+}) {
   const {
     days,
     hasUnsavedChanges,
@@ -61,35 +63,47 @@ export function ScheduleWorkspace() {
     stage,
     unresolvedConflictCount,
   } = useRosterBuilder();
+  const [supportOpen, setSupportOpen] = useState(false);
 
   const summary = getScheduleSummary(stage);
   const metrics = getScheduleMetrics(stage);
   const activeDay = days.find((day) => day.day === selectedDay) ?? days[0];
-  const focus = getScheduleFocus(
-    unresolvedConflictCount,
-    selectedDay,
-    comparisonMode,
-    window,
-  );
-  const notes = getScheduleNotes(
-    explanationPanelOpen,
+  const decisionPerson =
     days
       .find((day) => day.day === "Tuesday")
-      ?.shifts.find((shift) => shift.id === "tue-3")?.person,
-  );
+      ?.shifts.find((shift) => shift.id === "tue-3")?.person ?? "Mia Cruz";
+  const focus = [
+    {
+      label: "Day",
+      value: selectedDay,
+    },
+    {
+      label: "Left",
+      value: `${unresolvedConflictCount} left`,
+    },
+  ] as const;
 
   return (
     <>
-      <section className="grid items-start gap-4 xl:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.75fr)]">
+      <section className="grid items-start gap-4">
         <div className="grid items-start gap-4">
           <section className="story-panel px-4 py-4 sm:px-6 sm:py-5">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="story-system-label story-system-label-accent">
-                {summary.badge}
-              </span>
-              {hasUnsavedChanges ? (
-                <span className="story-system-label">Unsaved changes</span>
-              ) : null}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="story-system-label story-system-label-accent">
+                  {summary.badge}
+                </span>
+                {hasUnsavedChanges ? (
+                  <span className="story-system-label">Unsaved changes</span>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                onClick={() => setSupportOpen(true)}
+                className="story-nav-secondary inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-[color:var(--story-ink)]"
+              >
+                Details
+              </button>
             </div>
 
             <h2 className="mt-3 text-balance font-heading text-[2rem] leading-[0.94] text-[color:var(--story-ink)] sm:mt-4 sm:text-[3.25rem]">
@@ -99,7 +113,7 @@ export function ScheduleWorkspace() {
               {summary.detail}
             </p>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5 sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-5">
               {focus.map((item) => (
                 <div key={item.label} className="story-soft-card px-3 py-3">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[color:var(--story-subtle)]">
@@ -247,75 +261,17 @@ export function ScheduleWorkspace() {
             </article>
           </section>
         </div>
-
-        <div className="hidden gap-4 xl:grid">
-          <section className="story-panel px-5 py-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-                  Now
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={toggleExplanationPanel}
-                className="app-shell-icon-button"
-                aria-label={explanationPanelOpen ? "Hide explanation detail" : "Show explanation detail"}
-                title={explanationPanelOpen ? "Hide explanation detail" : "Show explanation detail"}
-              >
-                <SfSymbol name="sparkles" className="h-[1rem] w-[1rem]" />
-              </button>
-            </div>
-
-            <div className="mt-5 space-y-3">
-              {notes.map((note) => (
-                <div key={note.name} className="story-soft-card px-4 py-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-semibold text-[color:var(--story-ink)]">
-                      {note.name}
-                    </p>
-                    <span
-                      className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${getMetricTone(note.tone)}`}
-                    >
-                      live
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                    {note.note}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="story-panel px-5 py-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[color:var(--story-subtle)]">
-              Rules
-            </p>
-            <div className="mt-4 space-y-3">
-              {scheduleGuardrails.map((item) => (
-                <div key={item} className="story-soft-card px-4 py-4">
-                  <p className="text-sm leading-6 text-[color:var(--story-muted)]">{item}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 grid gap-2 sm:grid-cols-3 xl:grid-cols-1">
-              {scheduleActions.map((action) => (
-                <div key={action.id} className="story-soft-card px-4 py-4">
-                  <p className="text-sm font-semibold text-[color:var(--story-ink)]">
-                    {action.label}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-[color:var(--story-muted)]">
-                    {action.detail}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
       </section>
 
+      <ScheduleSupportSheet
+        open={supportOpen}
+        onOpenChange={setSupportOpen}
+        selectedDay={selectedDay}
+        unresolvedConflictCount={unresolvedConflictCount}
+        decisionPerson={decisionPerson}
+        teamTask={teamTask}
+        shiftTask={shiftTask}
+      />
       <ScheduleShiftSheet />
     </>
   );

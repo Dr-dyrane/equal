@@ -1,4 +1,3 @@
-import type { FairnessComparisonMode, FairnessWindow } from "@/features/fairness/provider/fairness-provider";
 import type { RosterStage } from "@/features/roster-builder/types";
 
 export type ScheduleMetric = {
@@ -64,24 +63,6 @@ export type ScheduleDecisionState = {
 
 export const SCHEDULE_DECISION_SHIFT_ID = "tue-3";
 export const SCHEDULE_DECISION_DEFAULT_PERSON = "Mia Cruz";
-
-export const scheduleActions = [
-  {
-    id: "review",
-    label: "Review",
-    detail: "Open the calls that still need judgment.",
-  },
-  {
-    id: "generate",
-    label: "Refresh",
-    detail: "Run the week again.",
-  },
-  {
-    id: "publish",
-    label: "Publish",
-    detail: "Send the roster.",
-  },
-] as const;
 
 const scheduleDecisionOptions: ScheduleAssignmentOption[] = [
   {
@@ -610,32 +591,6 @@ export function getScheduleSummary(stage: RosterStage) {
     title: "Tuesday needs a call.",
     detail: "Check Mia before publish.",
   };
-}
-
-export function getScheduleFocus(
-  unresolvedConflictCount: number,
-  selectedDay: string,
-  comparisonMode: FairnessComparisonMode,
-  window: FairnessWindow,
-) {
-  return [
-    {
-      label: "Day",
-      value: selectedDay,
-    },
-    {
-      label: "View",
-      value: comparisonMode === "team" ? "Team view" : comparisonMode === "role" ? "Role view" : "Self view",
-    },
-    {
-      label: "Window",
-      value: window === "6-weeks" ? "6 weeks" : window === "quarter" ? "Quarter" : "Year",
-    },
-    {
-      label: "Left",
-      value: `${unresolvedConflictCount} left`,
-    },
-  ] as const;
 }
 
 export function getScheduleNotes(
